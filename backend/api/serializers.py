@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Task, Track, Notation, Timesheet
+from .models import Task, Track, Notation, TrackTask, TrackNotation, Timesheet, Calendar, CalendarTask
 
 class UserSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField(read_only=True)
@@ -46,9 +46,21 @@ class UserSerializerWithToken(UserSerializer):
         return str(token.access_token)
 
 class TaskSerializer(serializers.ModelSerializer):
+    hours = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = Task
         fields = "__all__"
+
+    def get_hours(self, obj):
+        tracks_task = obj.tracktask_set.all()
+        task_hours = 0
+
+        for track_task in tracks_task:
+            if track_task.track.time_end:
+                task_hours += track_task.track.time_end.timestamp() - track_task.track.time_start.timestamp()    
+
+        return task_hours
 
 class NotationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -63,14 +75,21 @@ class TrackSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_related(self, obj):
-        try:
-            task = TrackTask.objects.get(track=obj).task
-            related_object = TaskSerializer(task, many=False).data
-        except Task.DoesNotExist:
-            notation = TrackNotation.objects.get(track=obj).notation
-            related_object = NotationSerializer(notation, many=False).data
-        except Notation.DoesNotExist:
-            related_object = False
+        related_object = False
+
+        track_task = TrackTask.objects.filter(track=obj).first()
+
+        if track_task:
+            task = track_task.task
+            related_object = {}
+            related_object["task"] = TaskSerializer(task, many=False).data
+
+        track_notation = TrackNotation.objects.filter(track=obj).first()
+
+        if track_notation:
+            notation = track_notation.notation
+            related_object = {}
+            related_object["notation"] = NotationSerializer(notation, many=False).data
 
         return related_object
 
@@ -88,3 +107,29 @@ class TimesheetSerializer(serializers.ModelSerializer):
 
     # def get_task(self, obj):
     #     return TaskSerializer(Task.objects.get(id=obj.))
+
+class CalendarSerializer(serializers.ModelSerializer):
+    related = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Calendar
+        fields = "__all__"
+
+    def get_related(self, obj):
+        related_object = False
+
+        calendar_task = CalendarTask.objects.filter(calendar=obj).first()
+
+        if calendar_task:
+            task = calendar_task.task
+            related_object = {}
+            related_object["task"] = TaskSerializer(task, many=False).data
+
+        # track_notation = TrackNotation.objects.filter(track=obj).first()
+
+        # if track_notation:
+        #     notation = track_notation.notation
+        #     related_object = {}
+        #     related_object["notation"] = NotationSerializer(notation, many=False).data
+
+        return related_object
