@@ -5,7 +5,6 @@ class Task(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     title = models.CharField(max_length=80, null=True, blank=True)
     color = models.CharField(max_length=8, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
     status = models.BooleanField(default=False)
 
 class Notification(models.Model):
@@ -28,6 +27,7 @@ class Timesheet(models.Model):
 
 class Calendar(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    title = models.CharField(max_length=80, null=True, blank=True)
     time_start = models.DateTimeField(null=True, blank=True)
     time_end = models.DateTimeField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
