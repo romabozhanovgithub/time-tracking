@@ -124,7 +124,7 @@ const CalendarScreen = ({ history }) => {
                                     <span className="d-flex justify-content-end calendar-new-time">{`${key}`}:00</span>
                                 </th>
                                     {
-                                        [0, 1, 2, 3, 4, 5, 6].map((eCol, keyCol) => (
+                                        [1, 2, 3, 4, 5, 6, 0].map((eCol, keyCol) => (
                                                 <td className="calendar-body">
                                                     {
                                                         (Object.prototype.toString.call(calendars) == "[object Array]" && calendars.length) ? (
