@@ -1,13 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Row, Col, Button, InputGroup, Form, FormControl, Modal } from "react-bootstrap";
+import { createTask } from "../actions/taskActions";
 
 const CreateNewTaskModal = ({ show, onHide }) => {
     const [taskName, setTaskName] = useState("");
-    const [taskColor, setTaskColor] = useState("");
+    const [taskColor, setTaskColor] = useState("#rrggbb");
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (show) {
+            setTaskName("");
+            setTaskColor("");
+        }
+    }, [show]);
 
     const createNewTask = () => {
-
+        dispatch(createTask({
+            title: taskName,
+            color: taskColor
+        }));
+        onHide();
     }
 
     return (
@@ -33,7 +47,7 @@ const CreateNewTaskModal = ({ show, onHide }) => {
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="danger" className="shadow-none" onClick={onHide}>Cancel</Button>
-                <Button variant="success" className="shadow-none" onClick={createNewTask}>Create</Button>
+                <Button variant="success" className="shadow-none" onClick={createNewTask} disabled={taskName ? false : true}>Create</Button>
             </Modal.Footer>
         </Modal>
     )
