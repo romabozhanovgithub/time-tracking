@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Row, Col, Button, InputGroup, Form, FormControl, Modal } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { Row, Col, Button, InputGroup, FormControl, Modal } from "react-bootstrap";
 import { createTask } from "../actions/taskActions";
 
 const CreateNewTaskModal = ({ show, onHide }) => {

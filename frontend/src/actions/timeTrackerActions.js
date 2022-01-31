@@ -1,4 +1,17 @@
-import { TRACK_LIST_REQUEST, TRACK_LIST_SUCCESS, TRACK_LIST_FAIL, TRACK_CREATE_REQUEST, TRACK_CREATE_SUCCESS, TRACK_CREATE_FAIL, TRACK_ADD_CREATE_REQUEST, TRACK_ADD_CREATE_SUCCESS, TRACK_ADD_CREATE_FAIL, TRACK_UPDATE_REQUEST, TRACK_UPDATE_SUCCESS, TRACK_UPDATE_FAIL, TRACK_DELETE_REQUEST, TRACK_DELETE_SUCCESS, TRACK_DELETE_FAIL } from "./types";
+import {
+    TRACK_LIST_REQUEST,
+    TRACK_LIST_SUCCESS,
+    TRACK_LIST_FAIL,
+    TRACK_CREATE_REQUEST,
+    TRACK_CREATE_SUCCESS,
+    TRACK_CREATE_FAIL,
+    TRACK_UPDATE_REQUEST,
+    TRACK_UPDATE_SUCCESS,
+    TRACK_UPDATE_FAIL,
+    TRACK_DELETE_REQUEST,
+    TRACK_DELETE_SUCCESS,
+    TRACK_DELETE_FAIL
+} from "./types";
 
 const url = "http://localhost:8000/api/";
 
@@ -16,7 +29,6 @@ export const listTracks = (page) => async (dispatch, getState) => {
             },
         })
         const data = await res.json();
-        console.log(data, "List action");
 
         if (!res.ok) {
             throw new Error(data.detail);
@@ -49,7 +61,6 @@ export const createTrack = (track) => async (dispatch, getState) => {
             body: JSON.stringify(track)
         })
         const data = await res.json();
-        console.log(data, "Create Action")
 
         if (!res.ok) {
             throw new Error(data.detail);
@@ -82,7 +93,6 @@ export const updateTrack = (track) => async (dispatch, getState) => {
             body: JSON.stringify(track)
         })
         const data = await res.json();
-        console.log(data, "Update action")
 
         if (!res.ok) {
             throw new Error(data.detail);
@@ -114,7 +124,6 @@ export const deleteTrack = (id) => async (dispatch, getState) => {
             },
         })
         const data = await res.json();
-        console.log(data)
 
         if (!res.ok) {
             throw new Error(data.detail);

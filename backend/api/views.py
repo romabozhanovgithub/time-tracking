@@ -13,6 +13,7 @@ from .permissions import IsOwnerOrReadOnly, IsOwner
 from collections import OrderedDict
 import datetime
 
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
@@ -24,8 +25,10 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         return data
 
+
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
 
 @api_view(["POST"])
 def register_user(request):
@@ -36,11 +39,11 @@ def register_user(request):
             email=data["email"],
             password=make_password(data["password"])
         )
-        # serializer = UserSerializerWithToken(user, many=False)
         return Response(status=status.HTTP_201_CREATED)
     except:
         message = {"detail": "User with this email already exists"}
         return Response(message, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
@@ -57,6 +60,7 @@ def create_task(request):
     serializer = TaskSerializer(task)
     return Response(serializer.data)
 
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_tasks(request):
@@ -64,6 +68,7 @@ def get_tasks(request):
     tasks = user.task_set.all()
     serializer = TaskSerializer(tasks, many=True)
     return Response(serializer.data)
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated, IsOwner])
@@ -73,10 +78,10 @@ def get_task(request, pk):
     serializer = TaskSerializer(task, many=False)
     return Response(serializer.data)
 
+
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated, IsOwner])
 def update_task(request, pk):
-    # serializer = TaskSerializer(request.data)
     data = request.data
     task = Task.objects.get(id=pk)
 
@@ -89,6 +94,7 @@ def update_task(request, pk):
     serializer = TaskSerializer(task, many=False)
     return Response(serializer.data)
 
+
 @api_view(["DELETE"])
 @permission_classes([IsAuthenticated, IsOwner])
 def delete_task(request, pk):
@@ -96,12 +102,12 @@ def delete_task(request, pk):
     task.delete()
     return Response("Deleted")
 
+
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def create_track(request):
     user = request.user
     data = request.data
-    print(data)
 
     track = Track.objects.create(
         user=user,
@@ -129,25 +135,14 @@ def create_track(request):
             )
 
     serializer = TrackSerializer(track)
-    print(serializer.data, 1)
     return Response(serializer.data)
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_tracks(request):
     user = request.user
     tracks = user.track_set.all().order_by("-time_start")
-
-    # serializer = TrackSerializer(tracks, many=True)
-
-    # [
-    #     {
-    #         "date": date,
-    #         "tracks": [{...}, {...}]
-    #     }
-    # ]
-
-    # print(request.query_params["page"])
 
     data = []
     days = []
@@ -167,12 +162,10 @@ def get_tracks(request):
     if len(data):
         tracks = user.track_set.all().filter(time_start__date__range=[data[-1], data[0]]).order_by("-time_start")
 
-    # Track.objects.all().delete()
-
-    # data.reverse()
     serializer = TrackSerializer(tracks, many=True)
 
     return Response(serializer.data)
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated, IsOwner])
@@ -182,13 +175,12 @@ def get_track(request, pk):
     serializer = TrackSerializer(track, many=False)
     return Response(serializer.data)
 
+
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated, IsOwner])
 def update_track(request, pk):
     data = request.data
     track = Track.objects.get(id=pk)
-
-    print(data)
 
     track.title = data["title"]
     track.time_start = data["time_start"]
@@ -223,30 +215,9 @@ def update_track(request, pk):
         if track_task:
             track_task.delete()
 
-        # elif "notation" in data["related"]:
-        #     try:
-        #         TrackNotation.objects.get(track=track)
-        #     except TrackNotation.DoesNotExist:
-        #         TrackNotation.objects.create(
-        #             track=track,
-        #             notation=Notation.objects.get(id=data["related"]["notation"])
-        #         )
-            
-        #     try:
-        #         TrackTask.objects.get(track=track).delete()
-        #     except TrackTask.DoesNotExist:
-        #         pass
-    # elif not data["related"]:
-    #     try:
-    #         TrackTask.objects.get(track=track).delete()
-    #     except TrackTask.DoesNotExist:
-    #         TrackNotation.objects.get(track=track).delete()
-    #     except TrackNotation.DoesNotExist:
-    #         pass
-
     serializer = TrackSerializer(track, many=False)
-    print(serializer.data)
     return Response(serializer.data)
+
 
 @api_view(["DELETE"])
 @permission_classes([IsAuthenticated, IsOwner])
@@ -255,6 +226,7 @@ def delete_track(request, pk):
     track.delete()
 
     return Response(pk)
+
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
@@ -273,6 +245,7 @@ def create_timesheet(request):
     serializer = TimesheetSerializer(timesheet)
     return Response(serializer.data)
 
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def get_timesheets(request):
@@ -281,6 +254,7 @@ def get_timesheets(request):
     serializer = TimesheetSerializer(timesheets, many=True)
     return Response(serializer.data)
 
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated, IsOwner])
 def get_timesheet(request, pk):
@@ -288,6 +262,7 @@ def get_timesheet(request, pk):
     timesheet = Timesheet.objects.get(id=pk)
     serializer = TimesheetSerializer(timesheet, many=False)
     return Response(serializer.data)
+
 
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated, IsOwner])
@@ -305,12 +280,14 @@ def update_timesheet(request, pk):
     serailizer = TimesheetSerializer(timesheet, many=False)
     return Response(serializer.data)
 
+
 @api_view(["DELETE"])
 @permission_classes([IsAuthenticated, IsOwner])
 def delete_timesheet(request, pk):
     timesheet = Timesheet.objects.get(id=pk)
     timesheet.delete()
     return Response("Deleted")
+
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
@@ -334,8 +311,8 @@ def create_calendar(request):
             )
 
     serializer = CalendarSerializer(calendar)
-    print(serializer.data)
     return Response(serializer.data)
+
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -343,19 +320,16 @@ def get_calendars(request):
     user = request.user
     page = request.query_params["page"].split(".")
     date = datetime.datetime(int(page[-1]), int(page[1]), int(page[0]))
-    print(date)
     calendars = user.calendar_set.all().filter(time_start__date__range=[date, date + datetime.timedelta(days=7)]).order_by("-time_start")
     serializer = CalendarSerializer(calendars, many=True)
-    # user.calendar_set.all().delete()
     return Response(serializer.data)
+
 
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated, IsOwner])
 def update_calendar(request, pk):
     data = request.data
     calendar = Calendar.objects.get(id=pk)
-
-    print(data)
 
     calendar.title = data["title"]
     calendar.time_start = data["timeStart"]
@@ -386,8 +360,8 @@ def update_calendar(request, pk):
             calendar_task.delete()
 
     serializer = CalendarSerializer(calendar, many=False)
-    print(serializer.data)
     return Response(serializer.data)
+
 
 @api_view(["DELETE"])
 @permission_classes([IsAuthenticated, IsOwner])

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Row, Col, ListGroup, Button, InputGroup, FormControl, Dropdown, Form, Table, Popover, OverlayTrigger } from "react-bootstrap";
+import { Button, Table, Popover, OverlayTrigger } from "react-bootstrap";
 import CreateNewCalendarTaskModal from "../components/CreateNewCalendarTaskModal";
 import EditCalendarModal from "../components/EditCalendarModal";
 import AddIcon from "@material-ui/icons/Add";
@@ -11,7 +11,6 @@ import { listCalendar } from "../actions/calendarActions";
 
 const CalendarScreen = ({ history }) => {
     const [scroll, setScroll] = useState(false);
-    const [calendarTable, setCalendarTable] = useState([]);
     const [num, setNum] = useState(24);
     const [timeCalendar, setTimeCalendar] = useState([new Date().getMinutes() * ((8 / 60) - 0.005), false]);
     const [calendarWeek, setCalendarWeek] = useState(false);
@@ -78,19 +77,20 @@ const CalendarScreen = ({ history }) => {
                     <span className="d-flex align-items-center justify-content-center calendar-week-previous" onClick={previousWeek}><NavigateBeforeIcon/></span>
                     <div className="d-flex align-items-center calendar-week-title">
                         {
-                            new Date(calendarWeek).toLocaleDateString() == (new Date(new Date().setDate(new Date().getDate() - new Date().getDay() + 1)).toLocaleDateString()) ? (
+                            new Date(calendarWeek).toLocaleDateString() == (
+                                new Date(new Date().setDate(new Date().getDate() - new Date().getDay() + 1)).toLocaleDateString()
+                            ) ? (
                                 <span>This week</span>
                             ) : (
                                 <span>{new Date(calendarWeek).toLocaleDateString()}</span>
-                                // <InputGroup>
-                                //     <FormControl className="text-center rounded shadow-none calendar-header-title" type="date" value={`${new Date(calendarWeek).getFullYear()}-${("0" + (new Date(calendarWeek).getMonth() + 1)).slice(-2)}-${("0" + new Date(calendarWeek).getDate()).slice(-2)}`} onChange={(e) => setCalendarWeek(e.target.value)}/>
-                                // </InputGroup>
                             )
                         }
                     </div>
                     <span className="d-flex align-items-center justify-content-center calendar-week-next" onClick={nextWeek}><NavigateNextIcon/></span>
                 </div>
-                <Button variant="outline-primary" className="d-flex align-items-center justify-content-center shadow-none" onClick={() => setModalCreateShow(true)}>+ ADD</Button>
+                <Button variant="outline-primary" className="d-flex align-items-center justify-content-center shadow-none" onClick={
+                    () => setModalCreateShow(true)
+                }>+ ADD</Button>
             </div>
             <div className="calendar-wrapper">
                 <Table bordered fixed>
@@ -129,7 +129,11 @@ const CalendarScreen = ({ history }) => {
                                                     {
                                                         (Object.prototype.toString.call(calendars) == "[object Array]" && calendars.length) ? (
                                                             calendars.map(calendar => (
-                                                                ((new Date(calendar.time_start).getDate() == (new Date(calendarWeek).getDate() + keyCol)) && (new Date(calendar.time_start).getHours() == key)) && (
+                                                                (
+                                                                    (new Date(calendar.time_start).getDate() == (new Date(calendarWeek).getDate() + keyCol)
+                                                                ) && (
+                                                                    new Date(calendar.time_start).getHours() == key)
+                                                                ) && (
                                                                     <OverlayTrigger trigger="hover" placement={(keyCol < 5) ? "right" : "left"} overlay={
                                                                         <Popover className="calendar-popover">
                                                                             <Popover.Header>
@@ -142,49 +146,125 @@ const CalendarScreen = ({ history }) => {
                                                                                 </div>
                                                                                 <div className="calendar-popover-content">
                                                                                     <div className="calendar-popover-title">Task</div>
-                                                                                    <div className="calendar-popover-content-description" style={{ color: calendar.related.task.color }}>{calendar.related.task.title}</div>
+                                                                                    <div className="calendar-popover-content-description" style={
+                                                                                        { color: calendar.related.task.color }
+                                                                                    }>{calendar.related.task.title}</div>
                                                                                 </div>
                                                                                 <div className="calendar-popover-content">
                                                                                     <div className="calendar-popover-title">Time</div>
                                                                                     <div className="calendar-popover-content-description">
-                                                                                        {`${("0" + new Date(calendar.time_start).getHours()).slice(-2)}:${("0" + new Date(calendar.time_start).getMinutes()).slice(-2)}`} - {`${("0" + new Date(calendar.time_end).getHours()).slice(-2)}:${("0" + new Date(calendar.time_end).getMinutes()).slice(-2)}`}
+                                                                                        {
+                                                                                            `${
+                                                                                                ("0" + new Date(calendar.time_start).getHours()).slice(-2)
+                                                                                                }:${
+                                                                                                ("0" + new Date(calendar.time_start).getMinutes()).slice(-2)
+                                                                                            }`
+                                                                                        } - {
+                                                                                            `${
+                                                                                                ("0" + new Date(calendar.time_end).getHours()).slice(-2)
+                                                                                            }:${
+                                                                                                ("0" + new Date(calendar.time_end).getMinutes()).slice(-2)
+                                                                                            }`
+                                                                                        }
                                                                                     </div>
                                                                                 </div>
                                                                                 <div className="calendar-popover-content">
                                                                                     <div className="calendar-popover-title">Hours</div>
                                                                                     <div className="calendar-popover-content-description">
-                                                                                        {`${("0" + Math.floor((Math.floor((new Date(calendar.time_end).getTime() - new Date(calendar.time_start).getTime()) / 60000)) / 60)).slice(-2)}:${("0" + Math.floor(((new Date(calendar.time_end).getTime() - new Date(calendar.time_start).getTime()) / 60000) % 60)).slice(-2)}`}
+                                                                                        {
+                                                                                            `${
+                                                                                                (
+                                                                                                    "0" + Math.floor(
+                                                                                                    (Math.floor(
+                                                                                                        (
+                                                                                                            new Date(calendar.time_end).getTime() - new Date(calendar.time_start).getTime()
+                                                                                                        ) / 60000
+                                                                                                    )) / 60
+                                                                                                    )
+                                                                                                ).slice(-2)
+                                                                                            }:${
+                                                                                                (
+                                                                                                    "0" + Math.floor(
+                                                                                                        (
+                                                                                                            (
+                                                                                                                new Date(calendar.time_end).getTime() - new Date(calendar.time_start).getTime()
+                                                                                                            ) / 60000
+                                                                                                        ) % 60
+                                                                                                    )
+                                                                                                ).slice(-2)
+                                                                                            }`
+                                                                                        }
                                                                                     </div>
                                                                                 </div>
                                                                             </Popover.Body>
                                                                         </Popover>
                                                                     }>
-                                                                        <div className="d-flex calendar-task" style={{ height: `${(((new Date(calendar.time_end).getTime() - new Date(calendar.time_start).getTime())) / 60000) * (8 / 60)}vh`, top: `${(new Date(calendar.time_start).getMinutes() * (8 / 60))}vh` }} onClick={() => handleSelect(calendar)}>
+                                                                        <div className="d-flex calendar-task" style={
+                                                                            {
+                                                                                height: `${(((new Date(calendar.time_end).getTime() - new Date(calendar.time_start).getTime())) / 60000) * (8 / 60)}vh`,
+                                                                                top: `${(new Date(calendar.time_start).getMinutes() * (8 / 60))}vh`
+                                                                            }
+                                                                        } onClick={() => handleSelect(calendar)}>
                                                                             <span className="d-inline-block side" style={{ background: calendar.related.task.color }}></span>
                                                                             <span className="text-break calendar-task-content">
-                                                                                <div className={`${(Math.floor(((new Date(calendar.time_end).getTime() - new Date(calendar.time_start).getTime())) / (60000 * 20))) < 1 && "d-none"} calendar-task-content-title`} style={{ webkitLineClamp: ((Math.floor(((new Date(calendar.time_end).getTime() - new Date(calendar.time_start).getTime())) / (60000 * 20)) - 1) <= 1) ? (
+                                                                                <div className={
+                                                                                    `${(Math.floor(((
+                                                                                        new Date(calendar.time_end).getTime() - new Date(calendar.time_start).getTime()
+                                                                                    )) / (60000 * 20))) < 1 && "d-none"} calendar-task-content-title`
+                                                                                } style={
+                                                                                    { webkitLineClamp: (
+                                                                                        (Math.floor(((
+                                                                                            new Date(calendar.time_end).getTime() - new Date(calendar.time_start).getTime()
+                                                                                        )) / (60000 * 20)) - 1) <= 1
+                                                                                    ) ? (
                                                                                     "1"
                                                                                 ) : (
-                                                                                    (calendar.title.length >= 16 && calendar.related.task.title.length >= 16 && Math.floor(((new Date(calendar.time_end).getTime() - new Date(calendar.time_start).getTime())) / (60000 * 20)) == 5) ? (
+                                                                                    (calendar.title.length >= 16 && calendar.related.task.title.length >= 16 && Math.floor(((
+                                                                                        new Date(calendar.time_end).getTime() - new Date(calendar.time_start).getTime()
+                                                                                    )) / (60000 * 20)) == 5) ? (
                                                                                         "2"
                                                                                     ) : (
-                                                                                        `${Math.round((Math.floor(((new Date(calendar.time_end).getTime() - new Date(calendar.time_start).getTime())) / (60000 * 21))) / 2)}`
+                                                                                        `${Math.round((Math.floor(((
+                                                                                            new Date(calendar.time_end).getTime() - new Date(calendar.time_start).getTime()
+                                                                                        )) / (60000 * 21))) / 2)}`
                                                                                     )
                                                                                 ) }}>
                                                                                     {calendar.title}
                                                                                 </div>
-                                                                                <div className={`${(Math.floor(((new Date(calendar.time_end).getTime() - new Date(calendar.time_start).getTime())) / (60000 * 21)) <= 1) && "d-none"} calendar-task-content-task-title`} style={{
-                                                                                    webkitLineClamp: `${((Math.floor(((new Date(calendar.time_end).getTime() - new Date(calendar.time_start).getTime())) / (60000 * 21)) - 1) <= 1) ? (
+                                                                                <div className={`${(Math.floor(((
+                                                                                    new Date(calendar.time_end).getTime() - new Date(calendar.time_start).getTime()
+                                                                                )) / (60000 * 21)) <= 1) && "d-none"} calendar-task-content-task-title`} style={{
+                                                                                    webkitLineClamp: `${((Math.floor(((
+                                                                                        new Date(calendar.time_end).getTime() - new Date(calendar.time_start).getTime()
+                                                                                    )) / (60000 * 21)) - 1) <= 1) ? (
                                                                                         "1"
                                                                                     ) : (
-                                                                                        `${Math.floor((Math.floor(((new Date(calendar.time_end).getTime() - new Date(calendar.time_start).getTime())) / (60000 * 21)) - 1) / 2)}`
+                                                                                        `${Math.floor((Math.floor(((
+                                                                                            new Date(calendar.time_end).getTime() - new Date(calendar.time_start).getTime()
+                                                                                        )) / (60000 * 21)) - 1) / 2)}`
                                                                                     )}`,
                                                                                     color: calendar.related.task.color
                                                                                 }}>
                                                                                     {calendar.related.task.title}
                                                                                 </div>
-                                                                                <div className={`${(Math.floor(((new Date(calendar.time_end).getTime() - new Date(calendar.time_start).getTime())) / (60000 * 20)) - 1) <= 1 && "d-none"} calendar-content-time`}>
-                                                                                    {`${("0" + new Date(calendar.time_start).getHours()).slice(-2)}:${("0" + new Date(calendar.time_start).getMinutes()).slice(-2)}`} - {`${("0" + new Date(calendar.time_end).getHours()).slice(-2)}:${("0" + new Date(calendar.time_end).getMinutes()).slice(-2)}`}
+                                                                                <div className={
+                                                                                    `${(Math.floor(((
+                                                                                        new Date(calendar.time_end).getTime() - new Date(calendar.time_start).getTime()
+                                                                                    )) / (60000 * 20)) - 1) <= 1 && "d-none"} calendar-content-time`
+                                                                                }>
+                                                                                    {
+                                                                                        `${
+                                                                                            ("0" + new Date(calendar.time_start).getHours()).slice(-2)
+                                                                                        }:${
+                                                                                            ("0" + new Date(calendar.time_start).getMinutes()).slice(-2)
+                                                                                        }`
+                                                                                    } - {
+                                                                                        `${
+                                                                                            ("0" + new Date(calendar.time_end).getHours()).slice(-2)
+                                                                                        }:${
+                                                                                            ("0" + new Date(calendar.time_end).getMinutes()).slice(-2)
+                                                                                        }`
+                                                                                    }
                                                                                 </div>
                                                                             </span>
                                                                         </div>

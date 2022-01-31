@@ -1,4 +1,20 @@
-import { TRACK_LIST_REQUEST, TRACK_LIST_SUCCESS, TRACK_LIST_FAIL, TRACK_CREATE_REQUEST, TRACK_CREATE_SUCCESS, TRACK_CREATE_FAIL, TRACK_ADD_CREATE_REQUEST, TRACK_ADD_CREATE_SUCCESS, TRACK_ADD_CREATE_FAIL, TRACK_UPDATE_REQUEST, TRACK_UPDATE_SUCCESS, TRACK_UPDATE_FAIL, TRACK_DELETE_REQUEST, TRACK_DELETE_SUCCESS, TRACK_DELETE_FAIL } from "../actions/types";
+import {
+    TRACK_LIST_REQUEST,
+    TRACK_LIST_SUCCESS,
+    TRACK_LIST_FAIL,
+    TRACK_CREATE_REQUEST,
+    TRACK_CREATE_SUCCESS,
+    TRACK_CREATE_FAIL,
+    TRACK_ADD_CREATE_REQUEST,
+    TRACK_ADD_CREATE_SUCCESS,
+    TRACK_ADD_CREATE_FAIL,
+    TRACK_UPDATE_REQUEST,
+    TRACK_UPDATE_SUCCESS,
+    TRACK_UPDATE_FAIL,
+    TRACK_DELETE_REQUEST,
+    TRACK_DELETE_SUCCESS,
+    TRACK_DELETE_FAIL
+} from "../actions/types";
 
 export const trackReducer = (state = {}, action) => {
     switch (action.type) {
@@ -10,8 +26,16 @@ export const trackReducer = (state = {}, action) => {
                     previous[1].push(
                         { 
                             date: current.time_start, 
-                            tracks: action.payload.filter(track => new Date(track.time_start).toLocaleDateString() == new Date(current.time_start).toLocaleDateString()), 
-                            totalTime: action.payload.filter(track => new Date(track.time_start).toLocaleDateString() == new Date(current.time_start).toLocaleDateString()).reduce((previousTrack, currentTrack) => previousTrack +  ((new Date(currentTrack.time_end).getTime() / 1000) - (new Date(currentTrack.time_start).getTime() / 1000)), 0) 
+                            tracks: action.payload.filter(
+                                track => new Date(track.time_start).toLocaleDateString() == new Date(current.time_start).toLocaleDateString()
+                            ), 
+                            totalTime: action.payload.filter(
+                                track => new Date(track.time_start).toLocaleDateString() == new Date(current.time_start).toLocaleDateString()
+                            ).reduce(
+                                (previousTrack, currentTrack) => previousTrack +  (
+                                    (new Date(currentTrack.time_end).getTime() / 1000) - (new Date(currentTrack.time_start).getTime() / 1000)
+                                ), 0
+                            ) 
                         }
                     ), [current, previous[1]]
                 ) : (
@@ -22,8 +46,16 @@ export const trackReducer = (state = {}, action) => {
                     [
                         { 
                             date: action.payload[0].time_start, 
-                            tracks: action.payload.filter(track => new Date(track.time_start).toLocaleDateString() == new Date(action.payload[0].time_start).toLocaleDateString()), 
-                            totalTime: action.payload.filter(track => new Date(track.time_start).toLocaleDateString() == new Date(action.payload[0].time_start).toLocaleDateString()).reduce((previousTrack, currentTrack) => previousTrack +  ((new Date(currentTrack.time_end).getTime() / 1000) - (new Date(currentTrack.time_start).getTime() / 1000)), 0) 
+                            tracks: action.payload.filter(
+                                track => new Date(track.time_start).toLocaleDateString() == new Date(action.payload[0].time_start).toLocaleDateString()
+                            ), 
+                            totalTime: action.payload.filter(
+                                track => new Date(track.time_start).toLocaleDateString() == new Date(action.payload[0].time_start).toLocaleDateString()
+                            ).reduce(
+                                (previousTrack, currentTrack) => previousTrack +  (
+                                    (new Date(currentTrack.time_end).getTime() / 1000) - (new Date(currentTrack.time_start).getTime() / 1000)
+                                ), 0
+                            ) 
                         }
                     ]
                 ])[1]
@@ -79,7 +111,13 @@ export const trackReducer = (state = {}, action) => {
         case TRACK_ADD_CREATE_REQUEST:
             return { ...state, loadingCreate: true }
         case TRACK_ADD_CREATE_SUCCESS:
-            return { ...state, loadingCreate: false, successCreate: true, tracks: [...state.tracks.map(day => new Date(day.date).toLocaleDateString() == (new Date(action.payload.time_start).toLocaleDateString()) ? ((day.tracks = [...day.tracks, action.payload]), day) : day)] }
+            return { ...state, loadingCreate: false, successCreate: true, tracks: [
+                ...state.tracks.map(
+                    day => new Date(day.date).toLocaleDateString() == (new Date(action.payload.time_start).toLocaleDateString()) ? (
+                        (day.tracks = [...day.tracks, action.payload]
+                    ), day) : day
+                )
+            ] }
         case TRACK_ADD_CREATE_FAIL:
             return { ...state, loadingCreate: false, errorCreate: action.payload }
         case TRACK_UPDATE_REQUEST:
@@ -92,15 +130,29 @@ export const trackReducer = (state = {}, action) => {
                             day.tracks.filter(track => track.id == action.payload.id).length ? (
                                 { 
                                     date: day.date, 
-                                    tracks: [...day.tracks.map(track => track.id == action.payload.id ? action.payload : track)].sort((trackPrevios, trackCurrent) => new Date(trackCurrent.time_start).getTime() - new Date(trackPrevios.time_start).getTime()), 
-                                    totalTime: [...day.tracks.map(track => track.id == action.payload.id ? action.payload : track)].reduce((previousTrack, currentTrack) => previousTrack +  ((new Date(currentTrack.time_end).getTime() / 1000) - (new Date(currentTrack.time_start).getTime() / 1000)), 0) 
+                                    tracks: [...day.tracks.map(track => track.id == action.payload.id ? action.payload : track)].sort(
+                                        (trackPrevios, trackCurrent) => new Date(trackCurrent.time_start).getTime() - new Date(trackPrevios.time_start).getTime()
+                                    ), 
+                                    totalTime: [
+                                        ...day.tracks.map(track => track.id == action.payload.id ? action.payload : track)
+                                    ].reduce(
+                                        (previousTrack, currentTrack) => previousTrack +  (
+                                            (new Date(currentTrack.time_end).getTime() / 1000) - (new Date(currentTrack.time_start).getTime() / 1000)
+                                        ), 0
+                                    ) 
                                 }
                             ) : (
                                 day.tracks.push(action.payload),
                                 { 
                                     date: day.date, 
-                                    tracks: day.tracks.sort((trackPrevios, trackCurrent) => new Date(trackCurrent.time_start).getTime() - new Date(trackPrevios.time_start).getTime()), 
-                                    totalTime: day.tracks.reduce((previousTrack, currentTrack) => previousTrack +  ((new Date(currentTrack.time_end).getTime() / 1000) - (new Date(currentTrack.time_start).getTime() / 1000)), 0) 
+                                    tracks: day.tracks.sort(
+                                        (trackPrevios, trackCurrent) => new Date(trackCurrent.time_start).getTime() - new Date(trackPrevios.time_start).getTime()
+                                    ), 
+                                    totalTime: day.tracks.reduce(
+                                        (previousTrack, currentTrack) => previousTrack +  (
+                                            (new Date(currentTrack.time_end).getTime() / 1000) - (new Date(currentTrack.time_start).getTime() / 1000)
+                                        ), 0
+                                    ) 
                                 }
                             )
                         ) : (
@@ -110,7 +162,11 @@ export const trackReducer = (state = {}, action) => {
                                 {
                                     date: day.date, 
                                     tracks: day.tracks.filter(track => track.id !== action.payload.id),
-                                    totalTime: day.tracks.filter(track => track.id !== action.payload.id).reduce((previousTrack, currentTrack) => previousTrack +  ((new Date(currentTrack.time_end).getTime() / 1000) - (new Date(currentTrack.time_start).getTime() / 1000)), 0)
+                                    totalTime: day.tracks.filter(track => track.id !== action.payload.id).reduce(
+                                        (previousTrack, currentTrack) => previousTrack +  (
+                                            (new Date(currentTrack.time_end).getTime() / 1000) - (new Date(currentTrack.time_start).getTime() / 1000)
+                                        ), 0
+                                    )
                                 }
                             ) : (
                                 day
@@ -126,7 +182,11 @@ export const trackReducer = (state = {}, action) => {
                         {
                             date: day.date, 
                             tracks: day.tracks.filter(track => track.id !== action.payload.id),
-                            totalTime: day.tracks.filter(track => track.id !== action.payload.id).reduce((previousTrack, currentTrack) => previousTrack +  ((new Date(currentTrack.time_end).getTime() / 1000) - (new Date(currentTrack.time_start).getTime() / 1000)), 0)
+                            totalTime: day.tracks.filter(track => track.id !== action.payload.id).reduce(
+                                (previousTrack, currentTrack) => previousTrack +  (
+                                    (new Date(currentTrack.time_end).getTime() / 1000) - (new Date(currentTrack.time_start).getTime() / 1000)
+                                ), 0
+                            )
                         }
                     ) : (
                         day
@@ -149,7 +209,11 @@ export const trackReducer = (state = {}, action) => {
                         {
                             date: day.date, 
                             tracks: day.tracks.filter(track => track.id !== action.payload),
-                            totalTime: day.tracks.filter(track => track.id !== action.payload).reduce((previousTrack, currentTrack) => previousTrack +  ((new Date(currentTrack.time_end).getTime() / 1000) - (new Date(currentTrack.time_start).getTime() / 1000)), 0)
+                            totalTime: day.tracks.filter(track => track.id !== action.payload).reduce(
+                                (previousTrack, currentTrack) => previousTrack +  (
+                                    (new Date(currentTrack.time_end).getTime() / 1000) - (new Date(currentTrack.time_start).getTime() / 1000)
+                                ), 0
+                            )
                         }
                     )
                 )

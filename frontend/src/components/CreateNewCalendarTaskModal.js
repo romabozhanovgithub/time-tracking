@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Row, Col, Button, InputGroup, Form, FormControl, Dropdown, Modal } from "react-bootstrap";
+import { Row, Col, Button, InputGroup, FormControl, Dropdown, Modal } from "react-bootstrap";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import CustomToggle from "../components/CustomToggle";
 import { createCalendar } from "../actions/calendarActions";
@@ -44,7 +44,25 @@ const CreateNewCalendarTaskModal = ({ show, onHide }) => {
             related: related,
             date: new Date(calendarDate),
             timeStart: (new Date((new Date(calendarDate).setHours(Number(calendarTimeStart.split(":")[0].slice(-2)), Number(calendarTimeStart.split(":")[1].slice(-2)))))),
-            timeEnd: ((new Date((new Date(calendarDate).setHours(Number(calendarTimeEnd.split(":")[0].slice(-2)), Number(calendarTimeEnd.split(":")[1].slice(-2)))))).getTime() - (new Date((new Date(calendarDate).setHours(Number(calendarTimeStart.split(":")[0].slice(-2)), Number(calendarTimeStart.split(":")[1].slice(-2)))))).getTime()) >= 0 ? (new Date((new Date(calendarDate).setHours(Number(calendarTimeEnd.split(":")[0].slice(-2)), Number(calendarTimeEnd.split(":")[1].slice(-2)))))) : (new Date(new Date((new Date(calendarDate).setHours(Number(calendarTimeEnd.split(":")[0].slice(-2)), Number(calendarTimeEnd.split(":")[1].slice(-2))))).setDate(new Date((new Date(calendarDate).setHours(Number(calendarTimeEnd.split(":")[0].slice(-2)), Number(calendarTimeEnd.split(":")[1].slice(-2))))).getDate() + 1)))
+            timeEnd: (
+                (
+                    new Date((new Date(calendarDate).setHours(Number(calendarTimeEnd.split(":")[0].slice(-2)), Number(calendarTimeEnd.split(":")[1].slice(-2)))))
+                ).getTime() - (
+                    new Date((new Date(calendarDate).setHours(Number(calendarTimeStart.split(":")[0].slice(-2)), Number(calendarTimeStart.split(":")[1].slice(-2)))))
+                ).getTime()
+            ) >= 0 ? (
+                new Date((new Date(calendarDate).setHours(Number(calendarTimeEnd.split(":")[0].slice(-2)), Number(calendarTimeEnd.split(":")[1].slice(-2)))))
+            ) : (
+                new Date(
+                    new Date(
+                        (new Date(calendarDate).setHours(Number(calendarTimeEnd.split(":")[0].slice(-2)), Number(calendarTimeEnd.split(":")[1].slice(-2))))
+                    ).setDate(
+                        new Date(
+                            (new Date(calendarDate).setHours(Number(calendarTimeEnd.split(":")[0].slice(-2)), Number(calendarTimeEnd.split(":")[1].slice(-2))))
+                        ).getDate() + 1
+                    )
+                )
+            )
         }));
         onHide();
     }
@@ -64,7 +82,9 @@ const CreateNewCalendarTaskModal = ({ show, onHide }) => {
                     <Col md={8}>
                         <div className="calendar-create-name">
                             <InputGroup>
-                                <FormControl className="rounded-0 shadow-none" placeholder="Task name" type="name" value={calendarTitle} onChange={(e) => setCalendarTitle(e.target.value)}/>
+                                <FormControl className="rounded-0 shadow-none" placeholder="Task name" type="name" value={calendarTitle} onChange={
+                                    (e) => setCalendarTitle(e.target.value)
+                                }/>
                             </InputGroup>
                         </div>
                     </Col>
@@ -79,7 +99,9 @@ const CreateNewCalendarTaskModal = ({ show, onHide }) => {
                                 <Dropdown.Toggle as={CustomToggle} id="calendar-create-task-dropdown">
                                     {
                                         related ? (
-                                            <span className="d-flex calendar-create-task-name"><span className="track-task-color" style={{ color: related.task.color }}> &#9679;</span><span className="text-truncate track-task-title"> {related.task.title}</span></span>
+                                            <span className="d-flex calendar-create-task-name"><span className="track-task-color" style={
+                                                { color: related.task.color }
+                                            }> &#9679;</span><span className="text-truncate track-task-title"> {related.task.title}</span></span>
                                         ) : (
                                             <span><AddCircleOutlineIcon/> Task</span>
                                         )
@@ -89,7 +111,9 @@ const CreateNewCalendarTaskModal = ({ show, onHide }) => {
                                     <div className="track-dropdown-task-search">
                                         <Dropdown.Item className="dropdown-input" onFocus={setInputFocus}>
                                             <InputGroup>
-                                                <FormControl className="border-0 shadow-none" id="dropdown-input" placeholder="Find task" value={searchTask} onChange={(e) => setSearchTask(e.target.value)}/>
+                                                <FormControl className="border-0 shadow-none" id="dropdown-input" placeholder="Find task" value={searchTask} onChange={
+                                                    (e) => setSearchTask(e.target.value)
+                                                }/>
                                             </InputGroup>
                                         </Dropdown.Item>
                                     </div>
@@ -143,7 +167,9 @@ const CreateNewCalendarTaskModal = ({ show, onHide }) => {
                     <Col md={8}>
                         <div className="calendar-create-time-start">
                             <InputGroup>
-                                <FormControl className="text-center rounded-0 shadow-none" type="time" value={calendarTimeStart} onChange={(e) => setCalendarTimeStart(e.target.value)}/>
+                                <FormControl className="text-center rounded-0 shadow-none" type="time" value={calendarTimeStart} onChange={
+                                    (e) => setCalendarTimeStart(e.target.value)
+                                }/>
                             </InputGroup>
                         </div>
                     </Col>
@@ -155,14 +181,32 @@ const CreateNewCalendarTaskModal = ({ show, onHide }) => {
                     <Col md={8}>
                         <div className="calendar-create-time-end">
                             <InputGroup>
-                                <FormControl className="text-center rounded-0 shadow-none" type="time" value={calendarTimeEnd} onChange={(e) => setCalendarTimeEnd(e.target.value)}/>
+                                <FormControl className="text-center rounded-0 shadow-none" type="time" value={calendarTimeEnd} onChange={
+                                    (e) => setCalendarTimeEnd(e.target.value)
+                                }/>
                             </InputGroup>
                         </div>
                     </Col>
                 </Row>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="success" className="shadow-none" onClick={createNewCalendarTask} disabled={(calendarDate && calendarTitle && calendarTimeStart && calendarTimeEnd && related && (((new Date((new Date(calendarDate).setHours(Number(calendarTimeEnd.split(":")[0].slice(-2)), Number(calendarTimeEnd.split(":")[1].slice(-2)))))).getTime() - (new Date((new Date(calendarDate).setHours(Number(calendarTimeStart.split(":")[0].slice(-2)), Number(calendarTimeStart.split(":")[1].slice(-2)))))).getTime()) > 0)) ? false : true}>Add</Button>
+                <Button variant="success" className="shadow-none" onClick={createNewCalendarTask} disabled={
+                    (
+                        calendarDate && calendarTitle && calendarTimeStart && calendarTimeEnd && related && (
+                            (
+                                (
+                                    new Date(
+                                        (new Date(calendarDate).setHours(Number(calendarTimeEnd.split(":")[0].slice(-2)), Number(calendarTimeEnd.split(":")[1].slice(-2))))
+                                    )
+                                ).getTime() - (
+                                    new Date(
+                                        (new Date(calendarDate).setHours(Number(calendarTimeStart.split(":")[0].slice(-2)), Number(calendarTimeStart.split(":")[1].slice(-2))))
+                                    )
+                                ).getTime()
+                            ) > 0
+                        )
+                    ) ? false : true
+                }>Add</Button>
             </Modal.Footer>
         </Modal>
     )

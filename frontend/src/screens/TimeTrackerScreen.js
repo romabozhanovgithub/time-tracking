@@ -120,7 +120,15 @@ const TimeTrackerScreen = ({ history }) => {
             setTrackEditRelated(track.related);
             setTrackEditTimeStart(`${("0" + new Date(track.time_start).getHours()).slice(-2)}:${("0" + new Date(track.time_start).getMinutes()).slice(-2)}`);
             setTrackEditTimeEnd(`${("0" + new Date(track.time_end).getHours()).slice(-2)}:${("0" + new Date(track.time_end).getMinutes()).slice(-2)}`);
-            setTrackEditDate(`${new Date(track.time_start).getFullYear()}-${("0" + (new Date(track.time_start).getMonth() + 1)).slice(-2)}-${("0" + new Date(track.time_start).getDate()).slice(-2)}`);
+            setTrackEditDate(
+                `${
+                    new Date(track.time_start).getFullYear()
+                }-${
+                    ("0" + (new Date(track.time_start).getMonth() + 1)).slice(-2)
+                }-${
+                    ("0" + new Date(track.time_start).getDate()).slice(-2)
+                }`
+            );
         }
         else if (eventKey == "delete") {
             dispatch(deleteTrack(track.id));
@@ -132,8 +140,24 @@ const TimeTrackerScreen = ({ history }) => {
         dispatch(updateTrack({
             ...track,
             title: trackEditName,
-            time_start: (new Date((new Date(trackEditDate).setHours(Number(trackEditTimeStart.split(":")[0].slice(-2)), Number(trackEditTimeStart.split(":")[1].slice(-2)))))),
-            time_end: ((new Date((new Date(trackEditDate).setHours(Number(trackEditTimeEnd.split(":")[0].slice(-2)), Number(trackEditTimeEnd.split(":")[1].slice(-2)))))).getTime() - (new Date((new Date(trackEditDate).setHours(Number(trackEditTimeStart.split(":")[0].slice(-2)), Number(trackEditTimeStart.split(":")[1].slice(-2)))))).getTime()) >= 0 ? (new Date((new Date(trackEditDate).setHours(Number(trackEditTimeEnd.split(":")[0].slice(-2)), Number(trackEditTimeEnd.split(":")[1].slice(-2)))))) : (new Date(new Date((new Date(trackEditDate).setHours(Number(trackEditTimeEnd.split(":")[0].slice(-2)), Number(trackEditTimeEnd.split(":")[1].slice(-2))))).setDate(new Date((new Date(trackEditDate).setHours(Number(trackEditTimeEnd.split(":")[0].slice(-2)), Number(trackEditTimeEnd.split(":")[1].slice(-2))))).getDate() + 1))),
+            time_start: (new Date(
+                (new Date(trackEditDate).setHours(
+                    Number(trackEditTimeStart.split(":")[0].slice(-2)), Number(trackEditTimeStart.split(":")[1].slice(-2))
+                ))
+            )),
+            time_end: ((
+                new Date((new Date(trackEditDate).setHours(
+                    Number(trackEditTimeEnd.split(":")[0].slice(-2)), Number(trackEditTimeEnd.split(":")[1].slice(-2))
+                )))
+            ).getTime() - (new Date((
+                new Date(trackEditDate).setHours(Number(trackEditTimeStart.split(":")[0].slice(-2)), Number(trackEditTimeStart.split(":")[1].slice(-2)))
+            ))).getTime()) >= 0 ? (new Date((
+                new Date(trackEditDate).setHours(Number(trackEditTimeEnd.split(":")[0].slice(-2)), Number(trackEditTimeEnd.split(":")[1].slice(-2)))
+            ))) : (new Date(new Date((
+                new Date(trackEditDate).setHours(Number(trackEditTimeEnd.split(":")[0].slice(-2)), Number(trackEditTimeEnd.split(":")[1].slice(-2)))
+            )).setDate(new Date((
+                new Date(trackEditDate).setHours(Number(trackEditTimeEnd.split(":")[0].slice(-2)), Number(trackEditTimeEnd.split(":")[1].slice(-2)))
+            )).getDate() + 1))),
             related: trackEditRelated
         }));
         setTrackEdit(false);
@@ -157,12 +181,16 @@ const TimeTrackerScreen = ({ history }) => {
                         <Row className="d-flex align-items-center">
                             <Col md={7} lg={8} xl={9}>
                                 <InputGroup>
-                                    <FormControl className="border-0 shadow-none" placeholder="What are you working on?" value={trackName} onChange={(e) => setTrackName(e.target.value)}/>
+                                    <FormControl className="border-0 shadow-none" placeholder="What are you working on?" value={trackName} onChange={
+                                        (e) => setTrackName(e.target.value)
+                                    }/>
                                     <Dropdown focusFirstItemOnShow>
                                         <Dropdown.Toggle as={CustomToggle} id="track-header-input-dropdown-md">
                                             {
                                                 related ? (
-                                                    <span className="d-flex"><span className="track-task-color" style={{ color: related.task.color }}> &#9679;</span><span className="text-truncate track-task-title"> {related.task.title}</span></span>
+                                                    <span className="d-flex"><span className="track-task-color" style={
+                                                        { color: related.task.color }
+                                                    }> &#9679;</span><span className="text-truncate track-task-title"> {related.task.title}</span></span>
                                                 ) : (
                                                     <span><AddCircleOutlineIcon/> Task</span>
                                                 )
@@ -172,7 +200,9 @@ const TimeTrackerScreen = ({ history }) => {
                                             <div className="track-dropdown-task-search">
                                                 <Dropdown.Item className="dropdown-input" onFocus={setInputFocus}>
                                                     <InputGroup>
-                                                        <FormControl className="border-0 shadow-none" id="dropdown-input" placeholder="Find task" value={searchTask} onChange={(e) => setSearchTask(e.target.value)}/>
+                                                        <FormControl className="border-0 shadow-none" id="dropdown-input" placeholder="Find task" value={searchTask} onChange={
+                                                            (e) => setSearchTask(e.target.value)
+                                                        }/>
                                                     </InputGroup>
                                                 </Dropdown.Item>
                                             </div>
@@ -189,7 +219,9 @@ const TimeTrackerScreen = ({ history }) => {
                                                             tasks.map(task => (
                                                                 <Dropdown.Item key={task.id} onClick={() => setRelated({ task })}>
                                                                     <div className="d-flex align-items-center track-dropdown-task">
-                                                                        <span className="d-flex rounded-circle track-dropdown-task-color" style={{ background: task.color }}></span>
+                                                                        <span className="d-flex rounded-circle track-dropdown-task-color" style={
+                                                                            { background: task.color }
+                                                                        }></span>
                                                                         <span className="text-truncate track-dropdown-task-title">{task.title}</span>
                                                                     </div>
                                                                 </Dropdown.Item>
@@ -212,7 +244,9 @@ const TimeTrackerScreen = ({ history }) => {
                                         <Dropdown.Toggle as={CustomToggle} id="track-header-input-dropdown">
                                             {
                                                 related ? (
-                                                    <span className="d-flex"><span className="track-task-color" style={{ color: related.task.color }}> &#9679;</span><span className="text-truncate track-task-title"> {related.task.title}</span></span>
+                                                    <span className="d-flex"><span className="track-task-color" style={
+                                                        { color: related.task.color }
+                                                    }> &#9679;</span><span className="text-truncate track-task-title"> {related.task.title}</span></span>
                                                 ) : (
                                                     <span className="track-add-task"><AddCircleOutlineIcon/> Task</span>
                                                 )
@@ -222,7 +256,9 @@ const TimeTrackerScreen = ({ history }) => {
                                             <div className="track-dropdown-task-search">
                                                 <Dropdown.Item className="dropdown-input" onFocus={setInputFocus}>
                                                     <InputGroup>
-                                                        <FormControl className="border-0 shadow-none" id="dropdown-input" placeholder="Find task" value={searchTask} onChange={(e) => setSearchTask(e.target.value)}/>
+                                                        <FormControl className="border-0 shadow-none" id="dropdown-input" placeholder="Find task" value={searchTask} onChange={
+                                                            (e) => setSearchTask(e.target.value)
+                                                        }/>
                                                     </InputGroup>
                                                 </Dropdown.Item>
                                             </div>
@@ -233,7 +269,9 @@ const TimeTrackerScreen = ({ history }) => {
                                                             tasks.map(task => (
                                                                 <Dropdown.Item key={task.id} onClick={() => setRelated({ task })}>
                                                                     <div className="d-flex align-items-center track-dropdown-task">
-                                                                        <span className="d-flex rounded-circle track-dropdown-task-color" style={{ background: task.color }}></span>
+                                                                        <span className="d-flex rounded-circle track-dropdown-task-color" style={
+                                                                            { background: task.color }
+                                                                        }></span>
                                                                         <span className="text-truncate track-dropdown-task-title">{task.title}</span>
                                                                     </div>
                                                                 </Dropdown.Item>
@@ -250,13 +288,17 @@ const TimeTrackerScreen = ({ history }) => {
                                     </Dropdown>
                                     <div className="d-inline-block my-auto track-header-time">
                                         <span className="d-flex justify-content-end my-auto">{`
-                                            ${("0" + Math.floor((Math.floor(time / 60)) / 60)).slice(-2)}:${("0" + Math.floor((time / 60)) % 60).slice(-2)}:${("0" + Math.floor(time % 60)).slice(-2)}
+                                            ${("0" + Math.floor((
+                                                Math.floor(time / 60)
+                                            ) / 60)).slice(-2)}:${("0" + Math.floor((time / 60)) % 60).slice(-2)}:${("0" + Math.floor(time % 60)).slice(-2)}
                                         `}</span>
                                     </div>
                                     <div className="d-inline-block">
                                         <div className="d-flex justify-content-end">
                                             <div className="d-inline my-auto track-header-button">
-                                                <Button variant={!clockInterval ? "primary" : "danger"} className="btn-lg shadow-none" onClick={trackHandler}>{!clockInterval ? "START" : "STOP"}</Button>
+                                                <Button variant={!clockInterval ? "primary" : "danger"} className="btn-lg shadow-none" onClick={trackHandler}>{
+                                                    !clockInterval ? "START" : "STOP"
+                                                }</Button>
                                             </div>
                                             <div className="d-flex align-items-end flex-column">
                                                 <span className="mode-button active" onClick={() => setModeHeader(1)}><AccessTimeIcon/></span>
@@ -332,8 +374,12 @@ const TimeTrackerScreen = ({ history }) => {
                         <ListGroup key={day.date} className="track-body">
                             <ListGroup.Item className="track-body-header">
                                 <div className="d-flex align-items-center justify-content-between">
-                                    <span className="float-start">{new Date(day.date).toLocaleDateString() == new Date().toLocaleDateString() ? "Today" : new Date(day.date).toLocaleDateString()}</span>
-                                    <span className="justify-content-end">Total: <span className="track-body-header-time">{`${("0" + Math.floor((Math.floor(day.totalTime / 60)) / 60)).slice(-2)}:${("0" + Math.floor((day.totalTime / 60) % 60)).slice(-2)}`}</span></span>
+                                    <span className="float-start">{
+                                        new Date(day.date).toLocaleDateString() == new Date().toLocaleDateString() ? "Today" : new Date(day.date).toLocaleDateString()
+                                    }</span>
+                                    <span className="justify-content-end">Total: <span className="track-body-header-time">{
+                                        `${("0" + Math.floor((Math.floor(day.totalTime / 60)) / 60)).slice(-2)}:${("0" + Math.floor((day.totalTime / 60) % 60)).slice(-2)}`
+                                    }</span></span>
                                 </div>
                             </ListGroup.Item>
                             {day.tracks.map(track => (
@@ -343,12 +389,16 @@ const TimeTrackerScreen = ({ history }) => {
                                             <Col md={12} lg={6} xl={6} xxl={7}>
                                                     <span className="d-flex track-body-edit-title">
                                                         <InputGroup>
-                                                            <FormControl className="shadow-none track-edit-title" placeholder="What are you working on?" value={trackEditName} onChange={(e) => setTrackEditName(e.target.value)}/>
+                                                            <FormControl className="shadow-none track-edit-title" placeholder="What are you working on?" value={trackEditName} onChange={
+                                                                (e) => setTrackEditName(e.target.value)
+                                                            }/>
                                                             <Dropdown focusFirstItemOnShow className="d-none d-md-block">
                                                                 <Dropdown.Toggle as={CustomToggle} id="track-edit-input-dropdown-md" color={!related ? "#008bdb" : ""}>
                                                                     {
                                                                         trackEditRelated ? (
-                                                                            <span className="d-flex"><span className="track-task-color" style={{ color: trackEditRelated.task.color }}> &#9679;</span><span className="text-truncate track-task-title"> {trackEditRelated.task.title}</span></span>
+                                                                            <span className="d-flex"><span className="track-task-color" style={
+                                                                                { color: trackEditRelated.task.color }
+                                                                            }> &#9679;</span><span className="text-truncate track-task-title"> {trackEditRelated.task.title}</span></span>
                                                                         ) : (
                                                                             <span><AddCircleOutlineIcon/> Task</span>
                                                                         )
@@ -358,7 +408,9 @@ const TimeTrackerScreen = ({ history }) => {
                                                                     <div className="track-dropdown-task-search">
                                                                         <Dropdown.Item className="dropdown-input" onFocus={setInputFocus}>
                                                                             <InputGroup>
-                                                                                <FormControl className="border-0 shadow-none" id="dropdown-input" placeholder="Find task" value={searchTask} onChange={(e) => setSearchTask(e.target.value)}/>
+                                                                                <FormControl className="border-0 shadow-none" id="dropdown-input" placeholder="Find task" value={searchTask} onChange={
+                                                                                    (e) => setSearchTask(e.target.value)
+                                                                                }/>
                                                                             </InputGroup>
                                                                         </Dropdown.Item>
                                                                     </div>
@@ -375,7 +427,9 @@ const TimeTrackerScreen = ({ history }) => {
                                                                                     tasks.map(task => (
                                                                                         <Dropdown.Item key={task.id} onClick={() => setTrackEditRelated({ task })}>
                                                                                             <div className="d-flex align-items-center track-dropdown-task">
-                                                                                                <span className="d-flex rounded-circle track-dropdown-task-color" style={{ background: task.color }}></span>
+                                                                                                <span className="d-flex rounded-circle track-dropdown-task-color" style={
+                                                                                                    { background: task.color }
+                                                                                                }></span>
                                                                                                 <span className="text-truncate track-dropdown-task-title">{task.title}</span>
                                                                                             </div>
                                                                                         </Dropdown.Item>
@@ -399,7 +453,9 @@ const TimeTrackerScreen = ({ history }) => {
                                                         <Dropdown.Toggle as={CustomToggle} id="track-edit-input-dropdown" color={!related ? "#008bdb" : ""}>
                                                         {
                                                             trackEditRelated ? (
-                                                                <span className="d-flex"><span className="track-task-color" style={{ color: trackEditRelated.task.color }}> &#9679;</span><span className="text-truncate track-task-title"> {trackEditRelated.task.title}</span></span>
+                                                                <span className="d-flex"><span className="track-task-color" style={
+                                                                    { color: trackEditRelated.task.color }
+                                                                }> &#9679;</span><span className="text-truncate track-task-title"> {trackEditRelated.task.title}</span></span>
                                                             ) : (
                                                                 <span><AddCircleOutlineIcon/> Task</span>
                                                             )
@@ -409,7 +465,9 @@ const TimeTrackerScreen = ({ history }) => {
                                                             <div className="track-dropdown-task-search">
                                                                 <Dropdown.Item className="dropdown-input" onFocus={setInputFocus}>
                                                                     <InputGroup>
-                                                                        <FormControl className="border-0 shadow-none" id="dropdown-input" placeholder="Find task" value={searchTask} onChange={(e) => setSearchTask(e.target.value)}/>
+                                                                        <FormControl className="border-0 shadow-none" id="dropdown-input" placeholder="Find task" value={searchTask} onChange={
+                                                                            (e) => setSearchTask(e.target.value)
+                                                                        }/>
                                                                     </InputGroup>
                                                                 </Dropdown.Item>
                                                             </div>
@@ -426,7 +484,9 @@ const TimeTrackerScreen = ({ history }) => {
                                                                             tasks.map(task => (
                                                                                 <Dropdown.Item key={task.id} onClick={() => setTrackEditRelated({ task })}>
                                                                                     <div className="d-flex align-items-center track-dropdown-task">
-                                                                                        <span className="d-flex rounded-circle track-dropdown-task-color" style={{ background: task.color }}></span>
+                                                                                        <span className="d-flex rounded-circle track-dropdown-task-color" style={
+                                                                                            { background: task.color }
+                                                                                        }></span>
                                                                                         <span className="text-truncate track-dropdown-task-title">{task.title}</span>
                                                                                     </div>
                                                                                 </Dropdown.Item>
@@ -444,14 +504,20 @@ const TimeTrackerScreen = ({ history }) => {
                                                     <div className="d-flex align-items-center justify-content-between track-edit-datetime">
                                                         <div className="d-flex align-items-center justify-content-between track-edit-time">
                                                             <InputGroup>
-                                                                <FormControl className="text-center rounded shadow-none" type="time" value={trackEditTimeStart} onChange={(e) => setTrackEditTimeStart(e.target.value)}/>
+                                                                <FormControl className="text-center rounded shadow-none" type="time" value={trackEditTimeStart} onChange={
+                                                                    (e) => setTrackEditTimeStart(e.target.value)
+                                                                }/>
                                                                 <span className="d-flex align-items-center track-header-time-start-divider">-</span>
-                                                                <FormControl className="text-center rounded shadow-none" type="time" value={trackEditTimeEnd} onChange={(e) => setTrackEditTimeEnd(e.target.value)}/>
+                                                                <FormControl className="text-center rounded shadow-none" type="time" value={trackEditTimeEnd} onChange={
+                                                                    (e) => setTrackEditTimeEnd(e.target.value)
+                                                                }/>
                                                             </InputGroup>
                                                         </div>
                                                         <div className="d-flex align-items-center justify-content-between track-edit-date">
                                                             <InputGroup>
-                                                                <FormControl className="text-center rounded shadow-none" type="date" value={trackEditDate} onChange={(e) => setTrackEditDate(e.target.value)}/>
+                                                                <FormControl className="text-center rounded shadow-none" type="date" value={trackEditDate} onChange={
+                                                                    (e) => setTrackEditDate(e.target.value)
+                                                                }/>
                                                             </InputGroup>
                                                             <span className="track-edit-time-save-md" onClick={() => trackUpdateHandler(track)}><SaveRoundedIcon/></span>
                                                         </div>
@@ -489,10 +555,26 @@ const TimeTrackerScreen = ({ history }) => {
                                                         <div className="d-flex align-items-center justify-content-between">
                                                             {track.time_end ? 
                                                                 <span>
-                                                                    {`${("0" + new Date(track.time_start).getHours()).slice(-2)}:${("0" + new Date(track.time_start).getMinutes()).slice(-2)} - ${("0" + new Date(track.time_end).getHours()).slice(-2)}:${("0" + new Date(track.time_end).getMinutes()).slice(-2)}`}
+                                                                    {
+                                                                        `${
+                                                                            ("0" + new Date(track.time_start).getHours()).slice(-2)
+                                                                        }:${
+                                                                            ("0" + new Date(track.time_start).getMinutes()).slice(-2)
+                                                                        } - ${
+                                                                            ("0" + new Date(track.time_end).getHours()).slice(-2)
+                                                                        }:${
+                                                                            ("0" + new Date(track.time_end).getMinutes()).slice(-2)
+                                                                        }`
+                                                                    }
                                                                 </span> : 
                                                                 <span>
-                                                                    {`${new Date(track.time_start).getHours()}:${("0" + new Date(track.time_start).getMinutes()).slice(-2)} - ??:??`}
+                                                                    {
+                                                                        `${
+                                                                            new Date(track.time_start).getHours()
+                                                                        }:${
+                                                                            ("0" + new Date(track.time_start).getMinutes()).slice(-2)
+                                                                        } - ??:??`
+                                                                    }
                                                                 </span>}
                                                             <span className="track-body-content-calendar"><CalendarTodayOutlinedIcon/></span>
                                                         </div>
@@ -500,7 +582,9 @@ const TimeTrackerScreen = ({ history }) => {
                                                             {
                                                                 track.time_end ? 
                                                                     <span>
-                                                                        {`${("0" + Math.floor((Math.floor(((new Date(track.time_end).getTime() / 1000) - (new Date(track.time_start).getTime() / 1000)) / 60)) / 60)).slice(-2)}:${
+                                                                        {`${("0" + Math.floor((Math.floor((
+                                                                            (new Date(track.time_end).getTime() / 1000) - (new Date(track.time_start).getTime() / 1000)
+                                                                        ) / 60)) / 60)).slice(-2)}:${
                                                                             (
                                                                                 "0" + Math.floor(
                                                                                     (

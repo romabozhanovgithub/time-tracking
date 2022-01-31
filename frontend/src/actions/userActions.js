@@ -27,7 +27,6 @@ export const login = (email, password) => async (dispatch) => {
             payload: data
         })
 
-        console.log(data);
         localStorage.setItem("userInfo", JSON.stringify(data));
     } catch (error) {
         dispatch({

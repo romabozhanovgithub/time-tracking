@@ -1,4 +1,20 @@
-import { TASK_LIST_REQUEST, TASK_LIST_SUCCESS, TASK_LIST_FAIL, TASK_DETAILS_REQUEST, TASK_DETAILS_SUCCESS, TASK_DETAILS_FAIL, TASK_CREATE_REQUEST, TASK_CREATE_SUCCESS, TASK_CREATE_FAIL, TASK_UPDATE_REQUEST, TASK_UPDATE_SUCCESS, TASK_UPDATE_FAIL, TASK_DELETE_REQUEST, TASK_DELETE_SUCCESS, TASK_DELETE_FAIL } from "./types";
+import {
+    TASK_LIST_REQUEST,
+    TASK_LIST_SUCCESS,
+    TASK_LIST_FAIL,
+    TASK_DETAILS_REQUEST,
+    TASK_DETAILS_SUCCESS,
+    TASK_DETAILS_FAIL,
+    TASK_CREATE_REQUEST,
+    TASK_CREATE_SUCCESS,
+    TASK_CREATE_FAIL,
+    TASK_UPDATE_REQUEST,
+    TASK_UPDATE_SUCCESS,
+    TASK_UPDATE_FAIL,
+    TASK_DELETE_REQUEST,
+    TASK_DELETE_SUCCESS,
+    TASK_DELETE_FAIL
+} from "./types";
 
 const url = "http://localhost:8000/api/";
 
@@ -16,7 +32,6 @@ export const listTasks = () => async (dispatch, getState) => {
             },
         })
         const data = await res.json();
-        console.log(data)
 
         if (!res.ok) {
             throw new Error(data.detail);

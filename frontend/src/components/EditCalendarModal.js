@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Row, Col, Button, InputGroup, Form, FormControl, Dropdown, Modal } from "react-bootstrap";
+import { Row, Col, Button, InputGroup, FormControl, Dropdown, Modal } from "react-bootstrap";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import CustomToggle from "../components/CustomToggle";
 import { updateCalendar, deleteCalendar } from "../actions/calendarActions";
@@ -29,7 +29,15 @@ const EditCalendarModal = ({ calendar, show, onHide }) => {
 
         if (show) {
             setCalendarTitle(calendar.title);
-            setCalendarDate(`${new Date(calendar.time_start).getFullYear()}-${("0" + (new Date(calendar.time_start).getMonth() + 1)).slice(-2)}-${("0" + new Date(calendar.time_start).getDate()).slice(-2)}`);
+            setCalendarDate(
+                `${
+                    new Date(calendar.time_start).getFullYear()
+                }-${
+                    ("0" + (new Date(calendar.time_start).getMonth() + 1)).slice(-2)
+                }-${
+                    ("0" + new Date(calendar.time_start).getDate()).slice(-2)
+                }`
+            );
             setCalendarTimeStart(`${("0" + new Date(calendar.time_start).getHours()).slice(-2)}:${("0" + new Date(calendar.time_start).getMinutes()).slice(-2)}`);
             setCalendarTimeEnd(`${("0" + new Date(calendar.time_end).getHours()).slice(-2)}:${("0" + new Date(calendar.time_end).getMinutes()).slice(-2)}`);
             setRelated(calendar.related);
@@ -90,7 +98,9 @@ const EditCalendarModal = ({ calendar, show, onHide }) => {
                             <Col md={8}>
                                 <div className="calendar-create-name">
                                     <InputGroup>
-                                        <FormControl className="rounded-0 shadow-none" placeholder="Task name" type="name" value={calendarTitle} onChange={(e) => setCalendarTitle(e.target.value)}/>
+                                        <FormControl className="rounded-0 shadow-none" placeholder="Task name" type="name" value={calendarTitle} onChange={
+                                            (e) => setCalendarTitle(e.target.value)
+                                        }/>
                                     </InputGroup>
                                 </div>
                             </Col>
@@ -105,7 +115,9 @@ const EditCalendarModal = ({ calendar, show, onHide }) => {
                                         <Dropdown.Toggle as={CustomToggle} id="calendar-create-task-dropdown">
                                             {
                                                 related ? (
-                                                    <span className="d-flex calendar-create-task-name"><span className="track-task-color" style={{ color: related.task.color }}> &#9679;</span><span className="text-truncate track-task-title"> {related.task.title}</span></span>
+                                                    <span className="d-flex calendar-create-task-name"><span className="track-task-color" style={
+                                                        { color: related.task.color }
+                                                    }> &#9679;</span><span className="text-truncate track-task-title"> {related.task.title}</span></span>
                                                 ) : (
                                                     <span><AddCircleOutlineIcon/> Task</span>
                                                 )
@@ -115,7 +127,9 @@ const EditCalendarModal = ({ calendar, show, onHide }) => {
                                             <div className="track-dropdown-task-search">
                                                 <Dropdown.Item className="dropdown-input" onFocus={setInputFocus}>
                                                     <InputGroup>
-                                                        <FormControl className="border-0 shadow-none" id="dropdown-input" placeholder="Find task" value={searchTask} onChange={(e) => setSearchTask(e.target.value)}/>
+                                                        <FormControl className="border-0 shadow-none" id="dropdown-input" placeholder="Find task" value={searchTask} onChange={
+                                                            (e) => setSearchTask(e.target.value)
+                                                        }/>
                                                     </InputGroup>
                                                 </Dropdown.Item>
                                             </div>
@@ -132,7 +146,9 @@ const EditCalendarModal = ({ calendar, show, onHide }) => {
                                                             tasks.map(task => (
                                                                 <Dropdown.Item key={task.id} onClick={() => setRelated({ task })}>
                                                                     <div className="d-flex align-items-center track-dropdown-task">
-                                                                        <span className="d-flex rounded-circle track-dropdown-task-color" style={{ background: task.color }}></span>
+                                                                        <span className="d-flex rounded-circle track-dropdown-task-color" style={
+                                                                            { background: task.color }
+                                                                        }></span>
                                                                         <span className="text-truncate track-dropdown-task-title">{task.title}</span>
                                                                     </div>
                                                                 </Dropdown.Item>
@@ -157,7 +173,9 @@ const EditCalendarModal = ({ calendar, show, onHide }) => {
                             <Col md={8}>
                                 <div className="calendar-create-date">
                                     <InputGroup>
-                                        <FormControl className="text-center rounded-0 shadow-none" type="date" value={calendarDate} onChange={(e) => setCalendarDate(e.target.value)}/>
+                                        <FormControl className="text-center rounded-0 shadow-none" type="date" value={calendarDate} onChange={
+                                            (e) => setCalendarDate(e.target.value)
+                                        }/>
                                     </InputGroup>
                                 </div>
                             </Col>
@@ -169,7 +187,9 @@ const EditCalendarModal = ({ calendar, show, onHide }) => {
                             <Col md={8}>
                                 <div className="calendar-create-time-start">
                                     <InputGroup>
-                                        <FormControl className="text-center rounded-0 shadow-none" type="time" value={calendarTimeStart} onChange={(e) => setCalendarTimeStart(e.target.value)}/>
+                                        <FormControl className="text-center rounded-0 shadow-none" type="time" value={calendarTimeStart} onChange={
+                                            (e) => setCalendarTimeStart(e.target.value)
+                                        }/>
                                     </InputGroup>
                                 </div>
                             </Col>
@@ -181,7 +201,9 @@ const EditCalendarModal = ({ calendar, show, onHide }) => {
                             <Col md={8}>
                                 <div className="calendar-create-time-end">
                                     <InputGroup>
-                                        <FormControl className="text-center rounded-0 shadow-none" type="time" value={calendarTimeEnd} onChange={(e) => setCalendarTimeEnd(e.target.value)}/>
+                                        <FormControl className="text-center rounded-0 shadow-none" type="time" value={calendarTimeEnd} onChange={
+                                            (e) => setCalendarTimeEnd(e.target.value)
+                                        }/>
                                     </InputGroup>
                                 </div>
                             </Col>
@@ -189,7 +211,31 @@ const EditCalendarModal = ({ calendar, show, onHide }) => {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="danger" className="shadow-none" onClick={() => setCalendarDelete(true)}>Delete</Button>
-                        <Button variant="success" className="shadow-none" onClick={editCalendar} disabled={(calendarDate && calendarTitle && calendarTimeStart && calendarTimeEnd && related && (((new Date((new Date(calendarDate).setHours(Number(calendarTimeEnd.split(":")[0].slice(-2)), Number(calendarTimeEnd.split(":")[1].slice(-2)))))).getTime() - (new Date((new Date(calendarDate).setHours(Number(calendarTimeStart.split(":")[0].slice(-2)), Number(calendarTimeStart.split(":")[1].slice(-2)))))).getTime()) > 0)) ? false : true}>Edit</Button>
+                        <Button variant="success" className="shadow-none" onClick={editCalendar} disabled={
+                            (
+                                calendarDate && calendarTitle && calendarTimeStart && calendarTimeEnd && related && (
+                                    (
+                                        (
+                                            new Date(
+                                                (
+                                                    new Date(calendarDate).setHours(
+                                                        Number(calendarTimeEnd.split(":")[0].slice(-2)), Number(calendarTimeEnd.split(":")[1].slice(-2))
+                                                    )
+                                                )
+                                            )
+                                        ).getTime() - (
+                                            new Date(
+                                                (
+                                                    new Date(calendarDate).setHours(
+                                                        Number(calendarTimeStart.split(":")[0].slice(-2)), Number(calendarTimeStart.split(":")[1].slice(-2))
+                                                    )
+                                                )
+                                            )
+                                        ).getTime()
+                                    ) > 0
+                                )
+                            ) ? false : true
+                        }>Edit</Button>
                     </Modal.Footer>
                 </Modal>
             )
