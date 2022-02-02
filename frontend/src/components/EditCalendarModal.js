@@ -25,7 +25,7 @@ const EditCalendarModal = ({ calendar, show, onHide }) => {
     } = taskState
 
     useEffect(() => {
-        !(Object.prototype.toString.call(tasks) == "[object Array]") && dispatch(listTasks());
+        !(Object.prototype.toString.call(tasks) === "[object Array]") && dispatch(listTasks());
 
         if (show) {
             setCalendarTitle(calendar.title);
@@ -134,7 +134,7 @@ const EditCalendarModal = ({ calendar, show, onHide }) => {
                                                 </Dropdown.Item>
                                             </div>
                                             {
-                                                (Object.prototype.toString.call(tasks) == "[object Array]" && tasks.length) ? (
+                                                (Object.prototype.toString.call(tasks) === "[object Array]" && tasks.length) ? (
                                                     <div className="track-dropdown-tasks">
                                                         <Dropdown.Item onClick={() => setRelated(false)}>
                                                             <div className="d-flex align-items-center track-dropdown-task">

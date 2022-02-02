@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Row, Col, ListGroup, Button, InputGroup, FormControl, Dropdown, Form } from "react-bootstrap";
+import { Row, Col, ListGroup, Button, InputGroup, FormControl, Dropdown} from "react-bootstrap";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import CustomToggle from "../components/CustomToggle";
 import CreateNewTaskModal from "../components/CreateNewTaskModal";
@@ -8,7 +8,7 @@ import EditTaskModal from "../components/EditTaskModal";
 import DeleteTaskModal from "../components/DeleteTaskModal";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
-import { listTasks, deleteTask } from "../actions/taskActions";
+import { listTasks } from "../actions/taskActions";
 
 const TasksScreen = ({ history }) => {
     const [search, setSearch] = useState("");
@@ -48,11 +48,11 @@ const TasksScreen = ({ history }) => {
     }, [dispatch, history, successCreate, successUpdate]);
 
     const handleSelect = (eventKey, task) => {
-        if (eventKey == "edit") {
+        if (eventKey === "edit") {
             setModalEditTask(task);
             setModalEditShow(true);
         }
-        else if (eventKey == "delete") {
+        else if (eventKey === "delete") {
             setModalDeleteTask(task);
             setModalDeleteShow(true);
         }
@@ -92,7 +92,7 @@ const TasksScreen = ({ history }) => {
                         <Loader/>
                     ) : error ? (
                         <Message variant="danger">{error}</Message>
-                    ) : (Object.prototype.toString.call(tasks) == "[object Array]" && tasks.length) ? (
+                    ) : (Object.prototype.toString.call(tasks) === "[object Array]" && tasks.length) ? (
                         tasks.map(task => (
                             <ListGroup.Item className="tasks-body-content" key={task.id}>
                                 <Row className="d-flex align-items-center">

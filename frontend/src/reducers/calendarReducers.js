@@ -34,7 +34,7 @@ export const calendarReducer = (state = {}, action) => {
             return { ...state, loadingUpdate: true }
         case CALENDAR_UPDATE_SUCCESS:
             const calendarUpdateList = [
-                ...state.calendars.map(calendar => calendar.id == action.payload.id ? action.payload : calendar)
+                ...state.calendars.map(calendar => calendar.id === action.payload.id ? action.payload : calendar)
             ].sort((calendarPrevios, calendarCurrent) => new Date(calendarCurrent.time_start).getTime() - new Date(calendarPrevios.time_start).getTime())
             return { ...state, loadingUpdate: false, successUpdate: true, calendars: calendarUpdateList }
         case CALENDAR_UPDATE_FAIL:

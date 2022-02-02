@@ -77,7 +77,7 @@ const CalendarScreen = ({ history }) => {
                     <span className="d-flex align-items-center justify-content-center calendar-week-previous" onClick={previousWeek}><NavigateBeforeIcon/></span>
                     <div className="d-flex align-items-center calendar-week-title">
                         {
-                            new Date(calendarWeek).toLocaleDateString() == (
+                            new Date(calendarWeek).toLocaleDateString() === (
                                 new Date(new Date().setDate(new Date().getDate() - new Date().getDay() + 1)).toLocaleDateString()
                             ) ? (
                                 <span>This week</span>
@@ -93,7 +93,7 @@ const CalendarScreen = ({ history }) => {
                 }>+ ADD</Button>
             </div>
             <div className="calendar-wrapper">
-                <Table bordered fixed>
+                <Table bordered fixed="true">
                     <thead>
                         <tr>
                             <th>
@@ -125,7 +125,7 @@ const CalendarScreen = ({ history }) => {
                                 </th>
                                     {
                                         [1, 2, 3, 4, 5, 6, 0].map((eCol, keyCol) => (
-                                                <td className="calendar-body">
+                                                <td className="calendar-body" key={keyCol}>
                                                     {
                                                         (Object.prototype.toString.call(calendars) == "[object Array]" && calendars.length) ? (
                                                             calendars.map(calendar => (

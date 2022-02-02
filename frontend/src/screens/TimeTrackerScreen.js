@@ -27,7 +27,6 @@ const TimeTrackerScreen = ({ history }) => {
     const [trackEditDate, setTrackEditDate] = useState(false);
     const [page, setPage] = useState(1);
     const [modeHeader, setModeHeader] = useState(1);
-    const [trackButton, setTrackButton] = useState(true);
     const [clockInterval, setClockInterval] = useState();
     const [time, setTime] = useState(0);
 
@@ -40,14 +39,7 @@ const TimeTrackerScreen = ({ history }) => {
     const {
         loading,
         error,
-        tracks,
-        trackCreated,
-        loadingCreate,
-        errorCreate,
-        successCreate,
-        loadingUpdate,
-        errorUpdate,
-        successUpdate
+        tracks
     } = trackState
     const taskState = useSelector(state => state.task)
     const {
@@ -58,8 +50,8 @@ const TimeTrackerScreen = ({ history }) => {
 
     useEffect(() => {
         if (userInfo) {
-            !(Object.prototype.toString.call(tracks) == "[object Array]") && dispatch(listTracks(page));
-            !(Object.prototype.toString.call(tasks) == "[object Array]") && dispatch(listTasks());
+            !(Object.prototype.toString.call(tracks) === "[object Array]") && dispatch(listTracks(page));
+            !(Object.prototype.toString.call(tasks) === "[object Array]") && dispatch(listTasks());
         }
         else if (!userInfo) {
             history.push("/login?redirect=timetracker");
@@ -114,7 +106,7 @@ const TimeTrackerScreen = ({ history }) => {
     }
 
     const handleSelect = (eventKey, track) => {
-        if (eventKey == "edit") {
+        if (eventKey === "edit") {
             setTrackEdit(track);
             setTrackEditName(track.title);
             setTrackEditRelated(track.related);
@@ -130,7 +122,7 @@ const TimeTrackerScreen = ({ history }) => {
                 }`
             );
         }
-        else if (eventKey == "delete") {
+        else if (eventKey === "delete") {
             dispatch(deleteTrack(track.id));
         }
     }
@@ -177,7 +169,7 @@ const TimeTrackerScreen = ({ history }) => {
         <div>
             <ListGroup className="track-header">
                 <ListGroup.Item>
-                    {modeHeader == 1 ? (
+                    {modeHeader === 1 ? (
                         <Row className="d-flex align-items-center">
                             <Col md={7} lg={8} xl={9}>
                                 <InputGroup>
@@ -207,7 +199,7 @@ const TimeTrackerScreen = ({ history }) => {
                                                 </Dropdown.Item>
                                             </div>
                                             {
-                                                (Object.prototype.toString.call(tasks) == "[object Array]" && tasks.length) ? (
+                                                (Object.prototype.toString.call(tasks) === "[object Array]" && tasks.length) ? (
                                                     <div className="track-dropdown-tasks">
                                                         <Dropdown.Item onClick={() => setRelated(false)}>
                                                             <div className="d-flex align-items-center track-dropdown-task">
@@ -263,7 +255,7 @@ const TimeTrackerScreen = ({ history }) => {
                                                 </Dropdown.Item>
                                             </div>
                                             {
-                                                (Object.prototype.toString.call(tasks) == "[object Array]" && tasks.length) ? (
+                                                (Object.prototype.toString.call(tasks) === "[object Array]" && tasks.length) ? (
                                                     <div className="track-dropdown-tasks">
                                                         {
                                                             tasks.map(task => (
@@ -375,7 +367,7 @@ const TimeTrackerScreen = ({ history }) => {
                             <ListGroup.Item className="track-body-header">
                                 <div className="d-flex align-items-center justify-content-between">
                                     <span className="float-start">{
-                                        new Date(day.date).toLocaleDateString() == new Date().toLocaleDateString() ? "Today" : new Date(day.date).toLocaleDateString()
+                                        new Date(day.date).toLocaleDateString() === new Date().toLocaleDateString() ? "Today" : new Date(day.date).toLocaleDateString()
                                     }</span>
                                     <span className="justify-content-end">Total: <span className="track-body-header-time">{
                                         `${("0" + Math.floor((Math.floor(day.totalTime / 60)) / 60)).slice(-2)}:${("0" + Math.floor((day.totalTime / 60) % 60)).slice(-2)}`
@@ -383,7 +375,7 @@ const TimeTrackerScreen = ({ history }) => {
                                 </div>
                             </ListGroup.Item>
                             {day.tracks.map(track => (
-                                trackEdit.id == track.id ? (
+                                trackEdit.id === track.id ? (
                                     <ListGroup.Item key={track.id}>
                                         <Row className="d-flex align-items-center track-body-content">
                                             <Col md={12} lg={6} xl={6} xxl={7}>
@@ -415,7 +407,7 @@ const TimeTrackerScreen = ({ history }) => {
                                                                         </Dropdown.Item>
                                                                     </div>
                                                                     {
-                                                                        (Object.prototype.toString.call(tasks) == "[object Array]" && tasks.length) ? (
+                                                                        (Object.prototype.toString.call(tasks) === "[object Array]" && tasks.length) ? (
                                                                             <div className="track-dropdown-tasks">
                                                                                 <Dropdown.Item onClick={() => setTrackEditRelated(false)}>
                                                                                     <div className="d-flex align-items-center track-dropdown-task">
@@ -472,7 +464,7 @@ const TimeTrackerScreen = ({ history }) => {
                                                                 </Dropdown.Item>
                                                             </div>
                                                             {
-                                                                (Object.prototype.toString.call(tasks) == "[object Array]" && tasks.length) ? (
+                                                                (Object.prototype.toString.call(tasks) === "[object Array]" && tasks.length) ? (
                                                                     <div className="track-dropdown-tasks">
                                                                         <Dropdown.Item onClick={() => setTrackEditRelated(false)}>
                                                                             <div className="d-flex align-items-center track-dropdown-task">

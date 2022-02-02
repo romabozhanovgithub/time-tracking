@@ -27,10 +27,10 @@ export const trackReducer = (state = {}, action) => {
                         { 
                             date: current.time_start, 
                             tracks: action.payload.filter(
-                                track => new Date(track.time_start).toLocaleDateString() == new Date(current.time_start).toLocaleDateString()
+                                track => new Date(track.time_start).toLocaleDateString() === new Date(current.time_start).toLocaleDateString()
                             ), 
                             totalTime: action.payload.filter(
-                                track => new Date(track.time_start).toLocaleDateString() == new Date(current.time_start).toLocaleDateString()
+                                track => new Date(track.time_start).toLocaleDateString() === new Date(current.time_start).toLocaleDateString()
                             ).reduce(
                                 (previousTrack, currentTrack) => previousTrack +  (
                                     (new Date(currentTrack.time_end).getTime() / 1000) - (new Date(currentTrack.time_start).getTime() / 1000)
@@ -47,10 +47,10 @@ export const trackReducer = (state = {}, action) => {
                         { 
                             date: action.payload[0].time_start, 
                             tracks: action.payload.filter(
-                                track => new Date(track.time_start).toLocaleDateString() == new Date(action.payload[0].time_start).toLocaleDateString()
+                                track => new Date(track.time_start).toLocaleDateString() === new Date(action.payload[0].time_start).toLocaleDateString()
                             ), 
                             totalTime: action.payload.filter(
-                                track => new Date(track.time_start).toLocaleDateString() == new Date(action.payload[0].time_start).toLocaleDateString()
+                                track => new Date(track.time_start).toLocaleDateString() === new Date(action.payload[0].time_start).toLocaleDateString()
                             ).reduce(
                                 (previousTrack, currentTrack) => previousTrack +  (
                                     (new Date(currentTrack.time_end).getTime() / 1000) - (new Date(currentTrack.time_start).getTime() / 1000)
@@ -69,10 +69,10 @@ export const trackReducer = (state = {}, action) => {
             return { ...state, loadingCreate: true }
         case TRACK_CREATE_SUCCESS:
             const listTracksCreate = state.tracks.length ? (
-                state.tracks.filter(day => new Date(day.date).toLocaleDateString() == new Date().toLocaleDateString()).length ? (
+                state.tracks.filter(day => new Date(day.date).toLocaleDateString() === new Date().toLocaleDateString()).length ? (
                     [
                         ...state.tracks.map(
-                            day => new Date(day.date).toLocaleDateString() == new Date().toLocaleDateString() ? 
+                            day => new Date(day.date).toLocaleDateString() === new Date().toLocaleDateString() ? 
                                 (
                                     { 
                                         date: day.date, 
@@ -113,7 +113,7 @@ export const trackReducer = (state = {}, action) => {
         case TRACK_ADD_CREATE_SUCCESS:
             return { ...state, loadingCreate: false, successCreate: true, tracks: [
                 ...state.tracks.map(
-                    day => new Date(day.date).toLocaleDateString() == (new Date(action.payload.time_start).toLocaleDateString()) ? (
+                    day => new Date(day.date).toLocaleDateString() === (new Date(action.payload.time_start).toLocaleDateString()) ? (
                         (day.tracks = [...day.tracks, action.payload]
                     ), day) : day
                 )
@@ -123,18 +123,18 @@ export const trackReducer = (state = {}, action) => {
         case TRACK_UPDATE_REQUEST:
             return { ...state, loadingUpdate: true }
         case TRACK_UPDATE_SUCCESS:
-            const listTracksUpdate = state.tracks.filter(day => new Date(day.date).toLocaleDateString() == new Date(action.payload.time_start).toLocaleDateString()).length ? (
+            const listTracksUpdate = state.tracks.filter(day => new Date(day.date).toLocaleDateString() === new Date(action.payload.time_start).toLocaleDateString()).length ? (
                 [
                     ...state.tracks.map(
-                        day => new Date(day.date).toLocaleDateString() == new Date(action.payload.time_start).toLocaleDateString() ? (
-                            day.tracks.filter(track => track.id == action.payload.id).length ? (
+                        day => new Date(day.date).toLocaleDateString() === new Date(action.payload.time_start).toLocaleDateString() ? (
+                            day.tracks.filter(track => track.id === action.payload.id).length ? (
                                 { 
                                     date: day.date, 
-                                    tracks: [...day.tracks.map(track => track.id == action.payload.id ? action.payload : track)].sort(
+                                    tracks: [...day.tracks.map(track => track.id === action.payload.id ? action.payload : track)].sort(
                                         (trackPrevios, trackCurrent) => new Date(trackCurrent.time_start).getTime() - new Date(trackPrevios.time_start).getTime()
                                     ), 
                                     totalTime: [
-                                        ...day.tracks.map(track => track.id == action.payload.id ? action.payload : track)
+                                        ...day.tracks.map(track => track.id === action.payload.id ? action.payload : track)
                                     ].reduce(
                                         (previousTrack, currentTrack) => previousTrack +  (
                                             (new Date(currentTrack.time_end).getTime() / 1000) - (new Date(currentTrack.time_start).getTime() / 1000)
@@ -157,7 +157,7 @@ export const trackReducer = (state = {}, action) => {
                             )
                         ) : (
                             day.tracks.filter(
-                                track => track.id == action.payload.id
+                                track => track.id === action.payload.id
                             ).length ? (
                                 {
                                     date: day.date, 
@@ -177,7 +177,7 @@ export const trackReducer = (state = {}, action) => {
             ) : (
                 [
                     ...state.tracks.map(day => day.tracks.filter(
-                        track => track.id == action.payload.id
+                        track => track.id === action.payload.id
                     ).length ? (
                         {
                             date: day.date, 

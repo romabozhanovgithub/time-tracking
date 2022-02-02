@@ -24,7 +24,7 @@ const CreateNewCalendarTaskModal = ({ show, onHide }) => {
     } = taskState
 
     useEffect(() => {
-        !(Object.prototype.toString.call(tasks) == "[object Array]") && dispatch(listTasks());
+        !(Object.prototype.toString.call(tasks) === "[object Array]") && dispatch(listTasks());
         if (show) {
             setCalendarDate(`${new Date().getFullYear()}-${("0" + (new Date().getMonth() + 1)).slice(-2)}-${("0" + new Date().getDate()).slice(-2)}`);
             setCalendarTitle("");
@@ -118,7 +118,7 @@ const CreateNewCalendarTaskModal = ({ show, onHide }) => {
                                         </Dropdown.Item>
                                     </div>
                                     {
-                                        (Object.prototype.toString.call(tasks) == "[object Array]" && tasks.length) ? (
+                                        (Object.prototype.toString.call(tasks) === "[object Array]" && tasks.length) ? (
                                             <div className="track-dropdown-tasks">
                                                 <Dropdown.Item onClick={() => setRelated(false)}>
                                                     <div className="d-flex align-items-center track-dropdown-task">

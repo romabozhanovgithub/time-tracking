@@ -294,8 +294,6 @@ def delete_timesheet(request, pk):
 def create_calendar(request):
     user = request.user
     data = request.data
-    print(data)
-
     calendar = Calendar.objects.create(
         user=user,
         title=data["title"],

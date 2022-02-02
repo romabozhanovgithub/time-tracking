@@ -39,7 +39,7 @@ export const taskReducer = (state = {}, action) => {
         case TASK_UPDATE_REQUEST:
             return { ...state, loadingUpdate: true }
         case TASK_UPDATE_SUCCESS:
-            return { ...state, loadingUpdate: false, successUpdate: true, tasks: [...state.tasks.map(task => task.id == action.payload.id ? action.payload : task )] }
+            return { ...state, loadingUpdate: false, successUpdate: true, tasks: [...state.tasks.map(task => task.id === action.payload.id ? action.payload : task )] }
         case TASK_UPDATE_FAIL:
             return { ...state, loadingUpdate: false, errorUpdate: action.payload }
         case TASK_DELETE_REQUEST:
