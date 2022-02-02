@@ -51,3 +51,6 @@ Go to ```localhost:3000``` to view the app
 ![Image alt](https://github.com/romabozhanovgithub/time_tracking/blob/main/images/calendar.png)
 
 ![Image alt](https://github.com/romabozhanovgithub/time_tracking/blob/main/images/create_calendar.png)
+
+## Quick mark
+This project still have a few issues and bugs(e.g. calendar dates works incorrectly), so it is on development stage
