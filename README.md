@@ -3,6 +3,14 @@
 ## Description
 This is web application for managing you projects, tracking you activity and calendar planing
 
+## Functionality
+- Sign up
+- Sing In
+- Manage you project
+- Track you current and previous activity(Can bound to project)
+- Create and manage your calendar
+Authentication system provided via JWT
+
 ## Setup
 ### Backend
 ```
