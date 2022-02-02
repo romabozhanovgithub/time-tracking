@@ -47,6 +47,7 @@ export const listTracks = (page) => async (dispatch, getState) => {
 }
 
 export const createTrack = (track) => async (dispatch, getState) => {
+    console.log(track)
     try {
         dispatch({ type: TRACK_CREATE_REQUEST })
 

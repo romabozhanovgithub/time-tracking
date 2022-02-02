@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
-from .models import Task, Track, Notation, TrackTask, TrackNotation, Calendar, CalendarTask
+from .models import Task, Track, Calendar
 from .serializers import UserSerializerWithToken, TaskSerializer, TrackSerializer, CalendarSerializer
 from .permissions import IsOwnerOrReadOnly, IsOwner
 from collections import OrderedDict
@@ -123,16 +123,9 @@ def create_track(request):
 
     if data["related"]:
         if "task" in data["related"]:
-            TrackTask.objects.create(
-                track=track,
-                task=Task.objects.get(id=data["related"]["task"]["id"])
-            )
-            print(1)
-        elif "notation" in data["related"]:
-            TrackNotation.objects.create(
-                track=track,
-                notation=Notation.objects.get(id=data["related"]["notation"]["id"])
-            )
+            task = Task.objects.get(id=data["related"]["task"]["id"])
+            track.task = task
+            track.save()
 
     serializer = TrackSerializer(track)
     return Response(serializer.data)
@@ -190,30 +183,18 @@ def update_track(request, pk):
 
     if data["related"]:
         if "task" in data["related"]:
-            track_task = TrackTask.objects.filter(track=track).first()
+            task = track.task
 
-            if not track_task:
-                TrackTask.objects.create(
-                    track=track,
-                    task=Task.objects.get(id=data["related"]["task"]["id"])
-                )
-            elif track_task.id != data["related"]["task"]["id"]:
-                track_task.delete()
-
-                TrackTask.objects.create(
-                    track=track,
-                    task=Task.objects.get(id=data["related"]["task"]["id"])
-                )
-            
-            track_notation = TrackNotation.objects.filter(track=track).first()
-
-            if track_notation:
-                track_notation.delete()
+            if not task:
+                task = Task.objects.filter(id=data["related"]["task"]["id"]).first()
+                track.task = task
+            elif task.id != data["related"]["task"]["id"]:
+                task = Task.objects.filter(id=data["related"]["task"]["id"]).first()
+                track.task = task
     elif not data["related"]:
-        track_task = TrackTask.objects.filter(track=track).first()
+        track.task = None
 
-        if track_task:
-            track_task.delete()
+    track.save()
 
     serializer = TrackSerializer(track, many=False)
     return Response(serializer.data)
@@ -303,10 +284,9 @@ def create_calendar(request):
 
     if data["related"]:
         if "task" in data["related"]:
-            CalendarTask.objects.create(
-                calendar=calendar,
-                task=Task.objects.get(id=data["related"]["task"]["id"])
-            )
+            task = Task.objects.filter(id=data["related"]["task"]["id"]).first()
+            calendar.task = task
+            calendar.save()
 
     serializer = CalendarSerializer(calendar)
     return Response(serializer.data)
@@ -336,26 +316,13 @@ def update_calendar(request, pk):
     calendar.save()
 
     if data["related"]:
-        if "task" in data["related"]:
-            calendar_task = CalendarTask.objects.filter(calendar=calendar).first()
-
-            if not calendar_task:
-                CalendarTask.objects.create(
-                    calendar=calendar,
-                    task=Task.objects.get(id=data["related"]["task"]["id"])
-                )
-            elif calendar_task.id != data["related"]["task"]["id"]:
-                calendar_task.delete()
-
-                CalendarTask.objects.create(
-                    calendar=calendar,
-                    task=Task.objects.get(id=data["related"]["task"]["id"])
-                )
+        if "task" in data["related"] and calendar_task.id != data["related"]["task"]["id"]:
+            task = Task.objects.get(id=data["related"]["task"]["id"])
+            calendar.task = task
     elif not data["related"]:
-        calendar_task = CalendarTask.objects.filter(calendar=calendar).first()
+        calendar.task = None
 
-        if calendar_task:
-            calendar_task.delete()
+    calendar.save()
 
     serializer = CalendarSerializer(calendar, many=False)
     return Response(serializer.data)

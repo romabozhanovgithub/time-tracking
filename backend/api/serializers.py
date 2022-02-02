@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import Task, Track, Notation, TrackTask, TrackNotation, Timesheet, Calendar, CalendarTask
+from .models import Task, Track, Timesheet, Calendar
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -56,20 +56,14 @@ class TaskSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_hours(self, obj):
-        tracks_task = obj.tracktask_set.all()
+        tracks = obj.track_set.all()
         task_hours = 0
 
-        for track_task in tracks_task:
-            if track_task.track.time_end:
-                task_hours += track_task.track.time_end.timestamp() - track_task.track.time_start.timestamp()    
+        for track in tracks:
+            if track.time_end:
+                task_hours += track.time_end.timestamp() - track.time_start.timestamp()    
 
         return task_hours
-
-
-class NotationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Notation
-        fields = "__all__"
 
 
 class TrackSerializer(serializers.ModelSerializer):
@@ -82,19 +76,11 @@ class TrackSerializer(serializers.ModelSerializer):
     def get_related(self, obj):
         related_object = False
 
-        track_task = TrackTask.objects.filter(track=obj).first()
+        task = obj.task
 
-        if track_task:
-            task = track_task.task
+        if task:
             related_object = {}
             related_object["task"] = TaskSerializer(task, many=False).data
-
-        track_notation = TrackNotation.objects.filter(track=obj).first()
-
-        if track_notation:
-            notation = track_notation.notation
-            related_object = {}
-            related_object["notation"] = NotationSerializer(notation, many=False).data
 
         return related_object
 
@@ -121,10 +107,9 @@ class CalendarSerializer(serializers.ModelSerializer):
     def get_related(self, obj):
         related_object = False
 
-        calendar_task = CalendarTask.objects.filter(calendar=obj).first()
+        task = obj.task
 
-        if calendar_task:
-            task = calendar_task.task
+        if task:
             related_object = {}
             related_object["task"] = TaskSerializer(task, many=False).data
             
