@@ -34,3 +34,20 @@ Go to ```localhost:3000``` to view the app
 - Redux
 - Router
 - PostgreSQL
+
+## Quick review
+![Image alt](https://github.com/romabozhanovgithub/time_tracking/blob/main/images/login.png)
+
+![Image alt](https://github.com/romabozhanovgithub/time_tracking/blob/main/images/register.png)
+
+![Image alt](https://github.com/romabozhanovgithub/time_tracking/blob/main/images/time_tracker.png)
+
+![Image alt](https://github.com/romabozhanovgithub/time_tracking/blob/main/images/tasks.png)
+
+![Image alt](https://github.com/romabozhanovgithub/time_tracking/blob/main/images/create_task.png)
+
+![Image alt](https://github.com/romabozhanovgithub/time_tracking/blob/main/images/edit_task.png)
+
+![Image alt](https://github.com/romabozhanovgithub/time_tracking/blob/main/images/calendar.png)
+
+![Image alt](https://github.com/romabozhanovgithub/time_tracking/blob/main/images/create_calendar.png)
