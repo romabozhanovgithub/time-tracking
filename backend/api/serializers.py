@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import Task, Track, Timesheet, Calendar
+from .db_debugger import query_debugger
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -49,14 +50,17 @@ class UserSerializerWithToken(UserSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    hours = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Task
         fields = "__all__"
 
+
+class TaskWithHoursSerializer(TaskSerializer):
+    hours = serializers.SerializerMethodField(read_only=True)
+
     def get_hours(self, obj):
-        tracks = obj.track_set.all()
+        tracks = obj.tracks.all()
         task_hours = 0
 
         for track in tracks:

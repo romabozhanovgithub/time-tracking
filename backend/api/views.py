@@ -8,10 +8,11 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
 from .models import Task, Track, Calendar
-from .serializers import UserSerializerWithToken, TaskSerializer, TrackSerializer, CalendarSerializer
+from .serializers import UserSerializerWithToken, TaskSerializer, TaskWithHoursSerializer, TrackSerializer, CalendarSerializer
 from .permissions import IsOwnerOrReadOnly, IsOwner
 from collections import OrderedDict
 import datetime
+from .db_debugger import query_debugger
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -65,8 +66,8 @@ def create_task(request):
 @permission_classes([IsAuthenticated])
 def get_tasks(request):
     user = request.user
-    tasks = user.task_set.all()
-    serializer = TaskSerializer(tasks, many=True)
+    tasks = Task.objects.prefetch_related("tracks").filter(user=user)
+    serializer = TaskWithHoursSerializer(tasks, many=True)
     return Response(serializer.data)
 
 
@@ -135,7 +136,8 @@ def create_track(request):
 @permission_classes([IsAuthenticated])
 def get_tracks(request):
     user = request.user
-    tracks = user.track_set.all().order_by("-time_start")
+    # tracks = user.tracks.order_by("-time_start")
+    tracks = Track.objects.select_related("task").filter(user=user).order_by("-time_start")
 
     data = []
     days = []
@@ -153,7 +155,7 @@ def get_tracks(request):
                 data.append("-".join([str(track.time_start.year), str(track.time_start.month), str(track.time_start.day)]))
 
     if len(data):
-        tracks = user.track_set.all().filter(time_start__date__range=[data[-1], data[0]]).order_by("-time_start")
+        tracks = tracks.filter(time_start__date__range=[data[-1], data[0]]).order_by("-time_start")
 
     serializer = TrackSerializer(tracks, many=True)
 
@@ -298,7 +300,7 @@ def get_calendars(request):
     user = request.user
     page = request.query_params["page"].split(".")
     date = datetime.datetime(int(page[-1]), int(page[1]), int(page[0]))
-    calendars = user.calendar_set.all().filter(time_start__date__range=[date, date + datetime.timedelta(days=7)]).order_by("-time_start")
+    calendars = user.calendars.all().filter(time_start__date__range=[date, date + datetime.timedelta(days=7)]).order_by("-time_start")
     serializer = CalendarSerializer(calendars, many=True)
     return Response(serializer.data)
 
