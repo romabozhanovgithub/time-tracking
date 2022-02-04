@@ -51,15 +51,12 @@ def register_user(request):
 def create_task(request):
     user = request.user
     data = request.data
+    data["user"] = user.id
 
-    task = Task.objects.create(
-        user=user,
-        title=data["title"],
-        color=data["color"]
-    )
-
-    serializer = TaskSerializer(task)
-    return Response(serializer.data)
+    serializer = TaskSerializer(data=data)
+    serializer.is_valid()
+    serializer.save(user=user)
+    return Response({**serializer.data, "hours": 0})
 
 
 @api_view(["GET"])
@@ -83,16 +80,14 @@ def get_task(request, pk):
 @api_view(["PUT"])
 @permission_classes([IsAuthenticated, IsOwner])
 def update_task(request, pk):
+    user = request.user
     data = request.data
+    
     task = Task.objects.get(id=pk)
 
-    task.title = data["title"]
-    task.color = data["color"]
-    task.status = data["status"]
-
-    task.save()
-
-    serializer = TaskSerializer(task, many=False)
+    serializer = TaskSerializer(task, data=data, many=False)
+    serializer.is_valid()
+    serializer.save(user=user)
     return Response(serializer.data)
 
 
@@ -110,25 +105,15 @@ def create_track(request):
     user = request.user
     data = request.data
 
-    track = Track.objects.create(
-        user=user,
-        title=data["title"],
-        time_start=data["timeStart"]
-    )
-
-    try:
-        track.time_end = data["timeEnd"]
-        track.save()
-    except:
-        pass
+    task = None
 
     if data["related"]:
         if "task" in data["related"]:
             task = Task.objects.get(id=data["related"]["task"]["id"])
-            track.task = task
-            track.save()
 
-    serializer = TrackSerializer(track)
+    serializer = TrackSerializer(data=data)
+    serializer.is_valid()
+    serializer.save(user=user, task=task)
     return Response(serializer.data)
 
 
@@ -136,7 +121,6 @@ def create_track(request):
 @permission_classes([IsAuthenticated])
 def get_tracks(request):
     user = request.user
-    # tracks = user.tracks.order_by("-time_start")
     tracks = Track.objects.select_related("task").filter(user=user).order_by("-time_start")
 
     data = []

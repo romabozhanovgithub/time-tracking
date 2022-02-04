@@ -72,6 +72,8 @@ class TaskWithHoursSerializer(TaskSerializer):
 
 class TrackSerializer(serializers.ModelSerializer):
     related = serializers.SerializerMethodField(read_only=True)
+    timeStart = serializers.DateTimeField(source="time_start")
+    timeEnd = serializers.DateTimeField(source="time_end", required=False)
 
     class Meta:
         model = Track
