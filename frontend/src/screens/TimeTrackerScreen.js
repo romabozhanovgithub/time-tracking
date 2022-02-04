@@ -49,9 +49,9 @@ const TimeTrackerScreen = ({ history }) => {
     } = taskState
 
     useEffect(() => {
-        if (userInfo) {
-            !(Object.prototype.toString.call(tracks) === "[object Array]") && dispatch(listTracks(page));
-            !(Object.prototype.toString.call(tasks) === "[object Array]") && dispatch(listTasks());
+        if (userInfo && (!(Object.prototype.toString.call(tracks) === "[object Array]") || !(Object.prototype.toString.call(tracks) === "[object Array]"))) {
+            dispatch(listTracks(page));
+            dispatch(listTasks());
         }
         else if (!userInfo) {
             history.push("/login?redirect=timetracker");
@@ -66,7 +66,7 @@ const TimeTrackerScreen = ({ history }) => {
         }
 
         document.getElementById("header-title") &&  (document.getElementById("header-title").innerText = "TIME TRACKER")
-    }, [dispatch, tracks, activeTrack, page]);
+    }, [dispatch, activeTrack, page]);
 
     const setInputFocus = () => {
         document.getElementById("dropdown-input").focus();

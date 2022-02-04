@@ -7,20 +7,15 @@ from .db_debugger import query_debugger
 
 class UserSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField(read_only=True)
-    is_admin = serializers.SerializerMethodField(read_only=True)
+    isAdmin = serializers.BooleanField(source="is_staff", read_only=True)
 
     class Meta:
         model = User
         fields = [
             "id",
             "username",
-            "email",
-            "name",
-            "is_admin"
+            "email"
         ]
-
-    def get_is_admin(self, obj):
-        return obj.is_staff
 
     def get_name(self, obj):
         name = obj.first_name
@@ -54,20 +49,6 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = "__all__"
-
-
-class TaskWithHoursSerializer(TaskSerializer):
-    hours = serializers.SerializerMethodField(read_only=True)
-
-    def get_hours(self, obj):
-        tracks = obj.tracks.all()
-        task_hours = 0
-
-        for track in tracks:
-            if track.time_end:
-                task_hours += track.time_end.timestamp() - track.time_start.timestamp()    
-
-        return task_hours
 
 
 class TrackSerializer(serializers.ModelSerializer):

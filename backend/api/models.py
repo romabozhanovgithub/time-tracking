@@ -6,6 +6,7 @@ class Task(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="tasks", null=True)
     title = models.CharField(max_length=80, null=True, blank=True)
     color = models.CharField(max_length=8, null=True, blank=True)
+    hours = models.IntegerField(default=0)
     status = models.BooleanField(default=False)
 
     def __str__(self):

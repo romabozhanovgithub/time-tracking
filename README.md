@@ -36,20 +36,29 @@ Go to ```localhost:3000``` to view the app
 - PostgreSQL
 
 ## Quick review
+
+# Login Page
 ![Image alt](https://github.com/romabozhanovgithub/time_tracking/blob/main/images/login.png)
 
+# Register Page
 ![Image alt](https://github.com/romabozhanovgithub/time_tracking/blob/main/images/register.png)
 
+# Tracks Page
 ![Image alt](https://github.com/romabozhanovgithub/time_tracking/blob/main/images/time_tracker.png)
 
+# Tasks Page
 ![Image alt](https://github.com/romabozhanovgithub/time_tracking/blob/main/images/tasks.png)
 
+# Create Task
 ![Image alt](https://github.com/romabozhanovgithub/time_tracking/blob/main/images/create_task.png)
 
+# Edit task
 ![Image alt](https://github.com/romabozhanovgithub/time_tracking/blob/main/images/edit_task.png)
 
+# Calendar Page
 ![Image alt](https://github.com/romabozhanovgithub/time_tracking/blob/main/images/calendar.png)
 
+# Create Calendar
 ![Image alt](https://github.com/romabozhanovgithub/time_tracking/blob/main/images/create_calendar.png)
 
 ## Quick mark

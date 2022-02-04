@@ -8,7 +8,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
 from .models import Task, Track, Calendar
-from .serializers import UserSerializerWithToken, TaskSerializer, TaskWithHoursSerializer, TrackSerializer, CalendarSerializer
+from .serializers import UserSerializerWithToken, TaskSerializer, TrackSerializer, CalendarSerializer
 from .permissions import IsOwnerOrReadOnly, IsOwner
 from collections import OrderedDict
 import datetime
@@ -64,7 +64,7 @@ def create_task(request):
 def get_tasks(request):
     user = request.user
     tasks = Task.objects.prefetch_related("tracks").filter(user=user)
-    serializer = TaskWithHoursSerializer(tasks, many=True)
+    serializer = TaskSerializer(tasks, many=True)
     return Response(serializer.data)
 
 
@@ -164,8 +164,6 @@ def update_track(request, pk):
     track.title = data["title"]
     track.time_start = data["time_start"]
     track.time_end = data["time_end"]
-
-    track.save()
 
     if data["related"]:
         if "task" in data["related"]:

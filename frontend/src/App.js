@@ -18,7 +18,7 @@ function App() {
       <Route path="/login" exact component={LoginScreen}/>
       <Route path="/register" exact component={RegisterScreen}/>
       <div className="wrapper">
-        <Route path="/timetracker" exact component={TimeTrackerScreen}/>
+        <Route path="/" exact component={TimeTrackerScreen}/>
         <Route path="/calendar" exact component={CalendarScreen}/>
         <Route path="/tasks" exact component={TasksScreen}/>
       </div>

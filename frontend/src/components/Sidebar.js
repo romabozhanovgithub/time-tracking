@@ -40,7 +40,7 @@ const Sidebar = () => {
                     <CloseIcon/>
                 </span>
             </span>
-            <NavLink to="/timetracker" activeClassName="active" onClick={sidebarHandler}>
+            <NavLink to="/" exact activeClassName="active" onClick={sidebarHandler}>
                 <AccessTimeIcon/>
                 TIME TRACKER
             </NavLink>
