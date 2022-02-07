@@ -10,6 +10,9 @@ def update_user(sender, instance, **kwargs):
         user.username = user.email
 
 def update_task_hours(sender, instance, **kwargs):
+    """
+    Updates task hours if track created or updated
+    """
     if instance.task:
         track = Track.objects.filter(id=instance.id).select_related("task").first()
 
